@@ -74,18 +74,6 @@ export const profiles = (state = [], action: any) => {
   }
 }
 
-export const eosjsInstances = (state = [], action: any) => {
-  const { type, data } = action
-  switch (type) {
-    case 'UPDATE_ACCOUNT':
-      return (data && data.eosjsInstances) || null
-    case 'LOG_OUT':
-      return []
-    default:
-      return state
-  }
-}
-
 export const chain = (state: string = 'mainnet', action: any) => {
   const { type, data } = action
   switch (type) {
@@ -126,7 +114,6 @@ export default combineReducers({
   account,
   accountIndex,
   profiles,
-  eosjsInstances,
   chain,
   isGuest,
   languageCode

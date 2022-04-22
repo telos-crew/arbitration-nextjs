@@ -4,9 +4,7 @@ import { Web3Context } from "../../library/Web3Provider";
 import { ethers } from "ethers";
 import { Layout } from 'antd';
 import appActions from '@iso/redux/app/actions';
-import TopbarNotification from './TopbarNotification';
-import TopbarMessage from './TopbarMessage';
-import TopbarSearch from './TopbarSearch';
+// import TopbarNotification from './TopbarNotification';
 import TopbarUser from './TopbarUser';
 import TopbarWrapper from './Topbar.styles';
 import { TopbarMenuIcon } from '@iso/config/icon.config';
@@ -16,11 +14,8 @@ const { Header } = Layout;
 const { toggleCollapsed } = appActions;
 
 const TopBar = () => {
-  const { acct, eth } = useContext(Web3Context);
-  const [account, setAccount] = acct;
-  const [ethersProvider, setEthersProvider] = eth;
   const dispatch = useDispatch();
-  const { App } = useSelector(state => state);
+  const { App, auth: { identity } } = useSelector(state => state);
   const { locale } = useSelector(state => state.LanguageSwitcher.language)
   const customizedTheme = useSelector(state => state.ThemeSwitcher.layoutTheme)
   const { collapsed, openDrawer } = App;
@@ -29,23 +24,6 @@ const TopBar = () => {
   const toggleIsCollapsed = () => {
     dispatch(toggleCollapsed());
   }
-
-  useEffect(() => {
-    //account found in local storage
-    if (window.localStorage.getItem("user") !== null) {
-      //save account to context
-      setAccount(window.localStorage.getItem("user"));
-
-      //create new ethers provider, save to context
-      const ep = new ethers.providers.Web3Provider(window.ethereum);
-      setEthersProvider(new ethers.providers.Web3Provider(window.ethereum));
-
-      //query balance, format, save to context
-      // let balance = await ep.getBalance(accounts[0])
-      // let formattedBal = ethers.utils.formatEther(balance)
-      // setBalance(formattedBal)
-    }
-  }, []);
 
   const styling = {
     background: customizedTheme.backgroundColor,
@@ -98,7 +76,7 @@ const TopBar = () => {
           >
             <TopbarAddtoCart url={url} locale={locale} />
           </li> */}
-            {account ? (
+            {identity ? (
               <li
                 className="isoUser"
               >
