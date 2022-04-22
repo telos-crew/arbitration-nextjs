@@ -12,8 +12,6 @@ type SigningRequestData = {
   expire_seconds?: number
 }
 
-const { REACT_APP_TELOS_NODE_URL } = process.env
-
 const TABLE_ROWS_ENDPOINT = 'v1/chain/get_table_rows'
 
 export const MAINNET_ENDPOINTS = ['https://telos.caleos.io', 'https://mainnet.telosusa.io']
@@ -28,21 +26,20 @@ const CONFIG = {
     CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f',
     BLOCK_EXPLORER_ENDPOINT: 'https://telos-test.bloks.io',
     ARBITRACTION_CONTRACT: 'testtelosarb',
-    APP_HOSTNAME: 'http://localhost:3000'
+    APP_HOSTNAME: 'http://localhost:3003'
   },
   mainnet: {
     TELOS_API_ENDPOINTS: MAINNET_ENDPOINTS,
     CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11',
     BLOCK_EXPLORER_ENDPOINT: 'https://telos.bloks.io',
     ARBITRACTION_CONTRACT: 'testtelosarb',
-    APP_HOSTNAME: 'http://localhost:3000'
+    APP_HOSTNAME: 'http://localhost:3003'
   }
 }
 
 
 const useBlockchain = () => {
-  const { identity } = useSelector((state: RootState) => state.authentication)
-  const chain = 'testnet'
+  const { identity, chain } = useSelector((state: RootState) => state.auth)
   const chainConfig = CONFIG[chain]
   const { TELOS_API_ENDPOINTS, BLOCK_EXPLORER_ENDPOINT, CHAIN_ID } = chainConfig
 
@@ -93,9 +90,22 @@ const useBlockchain = () => {
     return encoded
   }
 
+  const FETCH_USER_PROFILE = async (account_name: string) => {
+    const { rows } = await GET_TABLE_ROWS({
+      code: 'profiles',
+      scope: 'profiles',
+      table: 'profiles',
+      lower_bound: account_name,
+      upper_bound: account_name
+    })
+    console.log('FETCH_USER_PROFILE rows: ', rows)
+    const [profile] = rows
+    return profile
+  }
+
 	const GET_TABLE_ROWS = async (config: TableRowsConfig): Promise<{rows: any[]}> => {
 		const { data } = await axios({
-			url: `${REACT_APP_TELOS_NODE_URL}/${TABLE_ROWS_ENDPOINT}`,
+			url: `${TELOS_API_ENDPOINTS[0]}/${TABLE_ROWS_ENDPOINT}`,
 			method: 'post',
 			headers: {
 				'content-type': 'application/json'
@@ -154,8 +164,9 @@ const useBlockchain = () => {
     CREATE_SIGNING_REQUEST,
 		GET_TRX_WEB_LINK,
 		CREATE_IDENTITY_REQUEST,
+    FETCH_USER_PROFILE,
 		GET_TABLE_ROWS,
-    FILE_CASE
+    FILE_CASE,
 	}
 }
 

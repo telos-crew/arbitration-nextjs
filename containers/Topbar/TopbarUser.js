@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router'
+import { useDispatch,  useSelector } from 'react-redux';
 import Popover from '@iso/components/uielements/popover';
 import TopbarDropdownWrapper from './TopbarDropdown.styles';
-import userpic from '@iso/assets/images/user1.png';
 
 export default function TopbarUser() {
+  const dispatch = useDispatch()
+  const avatar = useSelector(state => (state.auth.profiles && state.auth.profiles[0] && state.auth.profiles[0].avatar) || '')
   const [visible, setVisibility] = useState(false);
-  const dispatch = useDispatch();
   function handleVisibleChange() {
     setVisibility(visible => !visible);
   }
@@ -33,8 +34,7 @@ export default function TopbarUser() {
       placement="bottomLeft"
     >
       <div className="isoImgWrapper">
-        <img alt="user" src={userpic} />
-        <span className="userActivity online" />
+        <img alt="user" src={avatar} />
       </div>
     </Popover>
   );

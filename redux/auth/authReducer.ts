@@ -15,6 +15,8 @@ type AccountAction = {
 export const identity = (state: Account = null, action: any) => {
   const { type, data } = action
   switch (type) {
+    case 'UPDATE_IDENTITY':
+      return data.identity || null
     case 'UPDATE_ACCOUNT':
       return data.identity || null
     case 'LOG_OUT':

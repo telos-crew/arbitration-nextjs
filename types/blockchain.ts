@@ -2,7 +2,9 @@ export type TableRowsConfig = {
 	code: string,
 	table: string,
 	scope: string,
-	limit?: string
+	limit?: string,
+	upper_bound?: string | null,
+	lower_bound?: string | null,
 }
 
 export type CaseFile = {

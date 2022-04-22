@@ -155,6 +155,8 @@ const TopbarWrapper = styled.div`
           .isoImgWrapper {
             width: 40px;
             height: 40px;
+            border-radius: 20px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;

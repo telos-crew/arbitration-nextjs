@@ -1,7 +1,12 @@
 export type AuthenticationReducer = {
-	identity: string
+	identity: string,
+	profiles: any[],
+	chain: string
 }
 
 export type RootState = {
-	authentication: AuthenticationReducer
+	auth: AuthenticationReducer,
+	App: any,
+	LanguageSwitcher: any,
+	ThemeSwitcher: any
 }

@@ -1,7 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Web3Context } from "../../library/Web3Provider";
-import { ethers } from "ethers";
 import { Layout } from 'antd';
 import appActions from '@iso/redux/app/actions';
 // import TopbarNotification from './TopbarNotification';
@@ -9,15 +7,19 @@ import TopbarUser from './TopbarUser';
 import TopbarWrapper from './Topbar.styles';
 import { TopbarMenuIcon } from '@iso/config/icon.config';
 import ConnectButton from "./ConnectButton";
+import { getUrlParam } from '../../util/url';
+import { RootState } from '../../types/redux';
+import useBlockchain from '../../hooks/useBlockchain';
 
 const { Header } = Layout;
 const { toggleCollapsed } = appActions;
 
 const TopBar = () => {
   const dispatch = useDispatch();
-  const { App, auth: { identity } } = useSelector(state => state);
-  const { locale } = useSelector(state => state.LanguageSwitcher.language)
-  const customizedTheme = useSelector(state => state.ThemeSwitcher.layoutTheme)
+  const { CREATE_IDENTITY_REQUEST, FETCH_USER_PROFILE } = useBlockchain()
+  const { App, auth: { identity } } = useSelector((state: RootState) => state);
+  const { locale } = useSelector((state: RootState) => state.LanguageSwitcher.language)
+  const customizedTheme = useSelector((state: RootState) => state.ThemeSwitcher.layoutTheme)
   const { collapsed, openDrawer } = App;
   const isCollapsed = collapsed && !openDrawer;
 
@@ -31,6 +33,39 @@ const TopBar = () => {
     width: '100%',
     height: 70,
   }
+
+  const createIdentityRequest = () => {
+    const url = CREATE_IDENTITY_REQUEST()
+    window.open(url, '_self')
+  }
+
+  const login = async (identity: string) => {
+    dispatch({
+      type: 'UPDATE_IDENTITY',
+      data: {
+        identity
+      }
+    })
+    try {
+      const profile = await FETCH_USER_PROFILE(identity)
+      dispatch({
+        type: 'UPDATE_PROFILES',
+        data: {
+          profiles: [profile]
+        }
+      })
+    } catch (err) {
+      console.warn(err)
+    }
+  }
+
+  useEffect(() => {
+    console.log('window.location.href is: ', window.location.href)
+    const id = getUrlParam(window.location.href, 'id')
+    if (id) {
+      login(id)
+    }
+  }, [])
 
   return (
     <TopbarWrapper>
@@ -83,7 +118,7 @@ const TopBar = () => {
                 <TopbarUser locale={locale} />
               </li>
             ) : (
-              <ConnectButton />
+              <ConnectButton createIdentityRequest={createIdentityRequest} />
             )}
         </ul>
       </Header>
