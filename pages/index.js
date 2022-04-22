@@ -7,10 +7,10 @@ import Widgets from '@iso/containers/Widgets/Widgets';
 const Home = () => (
   <>
     <Head>
-      <title>Daoable - Home</title>
+      <title>Telos Arbitration</title>
     </Head>
     <DashboardLayout>
-      <Widgets />
+
     </DashboardLayout>
   </>
 );
