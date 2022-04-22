@@ -7,7 +7,6 @@ type AccountAction = {
     account_name: string
     accountIndex: number
     profiles: any[]
-    eosjsInstances: any[]
     profile?: any[]
   }
 }
@@ -76,7 +75,7 @@ export const profiles = (state = [], action: any) => {
   }
 }
 
-export const chain = (state: string = 'mainnet', action: any) => {
+export const chain = (state: string = 'testnet', action: any) => {
   const { type, data } = action
   switch (type) {
     case 'UPDATE_CHAIN':

@@ -124,7 +124,7 @@ const useBlockchain = () => {
 		return data
 	}
 
-	const FETCH_CASES = async (): Promise<any> => {
+	const FETCH_CASE_FILES = async (): Promise<any> => {
 		const { rows } = await GET_TABLE_ROWS({
 			code: CONFIG[chain].ARBITRACTION_CONTRACT,
 			scope: CONFIG[chain].ARBITRACTION_CONTRACT,
@@ -159,7 +159,7 @@ const useBlockchain = () => {
   }
 
 	return {
-		FETCH_CASES,
+		FETCH_CASE_FILES,
 		GET_AUTHORIZATION,
     CREATE_SIGNING_REQUEST,
 		GET_TRX_WEB_LINK,
