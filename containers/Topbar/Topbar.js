@@ -8,7 +8,6 @@ import TopbarNotification from './TopbarNotification';
 import TopbarMessage from './TopbarMessage';
 import TopbarSearch from './TopbarSearch';
 import TopbarUser from './TopbarUser';
-import TopbarAddtoCart from './TopbarAddToCart';
 import TopbarWrapper from './Topbar.styles';
 import { TopbarMenuIcon } from '@iso/config/icon.config';
 import ConnectButton from "./ConnectButton";
