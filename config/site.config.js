@@ -1,7 +1,7 @@
 export default {
   siteName: 'ISOMORPHIC',
   siteIcon: 'ion-flash',
-  footerText: `Daoable @ ${new Date().getFullYear()} Created by Dappetizer`,
+  footerText: `Telos Arbitration @ ${new Date().getFullYear()} Created by The Telos Crew`,
   enableAnimatedRoute: false,
   apiUrl: 'http://yoursite.com/api/',
   google: {
