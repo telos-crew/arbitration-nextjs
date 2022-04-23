@@ -84,6 +84,7 @@ const useBlockchain = () => {
     }
     console.log('identity: ', identity)
     console.log('dataWithChainId: ', dataWithChainId)
+    console.log('data: ', data)
     console.log(JSON.stringify(dataWithChainId))
     const req1 = await SigningRequest.create(dataWithChainId, getEsrOptions(TELOS_API_ENDPOINTS[0]))
     const encoded = req1.encode()
@@ -140,7 +141,7 @@ const useBlockchain = () => {
     lang_codes: number[]
   }
 
-  const FILE_CASE = async (data: FileCaseData, callbackRoute: string): Promise<any> => {
+  const FILE_CASE = async (data: FileCaseData, callbackRoute?: string): Promise<any> => {
     const actions = [
       {
         account: CONFIG[chain].ARBITRACTION_CONTRACT,

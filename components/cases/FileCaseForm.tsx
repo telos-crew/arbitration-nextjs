@@ -10,6 +10,7 @@ import ContentHolder from '@iso/components/utility/contentHolder';
 import IntlMessages from '@iso/components/utility/intlMessages';
 import { LANG_CODES_LIST } from '../../constants';
 import { validateName, validateIpfsHash } from '../../util/blockchain';
+import useBlockchain from '../../hooks/useBlockchain';
 
 const Option = SelectOption;
 const { rowStyle, colStyle } = basicStyle;
@@ -24,6 +25,7 @@ const INITIAL_INPUT = {
 }
 
 const FileCaseForm = () => {
+	const { FILE_CASE } = useBlockchain()
 	const [input, setInput] = useState(INITIAL_INPUT)
 	const [errorMessage, setErrorMessage] = useState('')
 
@@ -43,7 +45,7 @@ const FileCaseForm = () => {
 		})
 	}
 
-	const submit = () => {
+	const submit = async () => {
 		const { claimant, respondant, lang_codes, claim_link } = input
 		if (!claimant || !respondant || !claim_link) {
 			setErrorMessage('Please fill all the fields')
@@ -64,6 +66,13 @@ const FileCaseForm = () => {
 		if (lang_codes.length === 0) {
 			setErrorMessage('Must select at least one language')
 			return
+		}
+
+		try {
+			const url = await FILE_CASE(input)
+			window.open(url, '_self')
+		} catch (err) {
+			console.warn(err)
 		}
 	}
 

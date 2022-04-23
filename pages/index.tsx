@@ -7,21 +7,29 @@ import FileCaseForm from '../components/cases/FileCaseForm'
 import DashboardLayout from '../containers/DashboardLayout/DashboardLayout'
 import Forms from '../containers/Forms/Forms';
 import InputField from './dashboard/inputField';
+import { useSelector } from 'react-redux';
+import { RootState } from '../types'
 // import Widgets from '@iso/containers/Widgets/Widgets';
 
-const Home = () => (
-  <>
-    <Head>
-      <title>Telos Arbitration</title>
-    </Head>
-    <DashboardLayout>
-      <LayoutWrapper>
-        <FileCaseForm />
-        <CaseFilesTable />
-        <Forms />
-      </LayoutWrapper>
-    </DashboardLayout>
-  </>
-);
+const Home = () => {
+  const { identity } = useSelector((state: RootState) => state.auth)
+
+  return (
+    <>
+      <Head>
+        <title>Telos Arbitration</title>
+      </Head>
+      <DashboardLayout>
+        <LayoutWrapper>
+          {!!identity && (
+            <FileCaseForm />
+          )}
+          <CaseFilesTable />
+          <Forms />
+        </LayoutWrapper>
+      </DashboardLayout>
+    </>
+  )
+}
 
 export default Home
