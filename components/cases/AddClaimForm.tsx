@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Col, Row, Button, Alert } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
 import Input, {
@@ -8,9 +8,9 @@ import Select, { SelectOption } from '@iso/components/uielements/select';
 import Box from '@iso/components/utility/box';
 import ContentHolder from '@iso/components/utility/contentHolder';
 import IntlMessages from '@iso/components/utility/intlMessages';
-import { LANG_CODES_LIST } from '../../constants';
 import { validateName, validateIpfsHash } from '../../util/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
+import { CaseFile } from '../../types/blockchain';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
 
@@ -20,20 +20,38 @@ const { rowStyle, colStyle } = basicStyle;
 // name claimant, string claim_link, vector<uint8_t> lang_codes,std::optional<name> respondant
 
 const INITIAL_INPUT = {
-	claimant: '',
-	respondant:'',
-	lang_codes: [],
-	claim_link: ''
+	case_id: null,
+	claim_link: '',
+	claimant: ''
 }
 
-const FileCaseForm = () => {
-	const { FILE_CASE } = useBlockchain()
+const AddClaimForm = () => {
+	const { FILE_CASE, FETCH_CASE_FILES } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
+	const [userCases, setUserCases] = useState([])
 	const [input, setInput] = useState({
 		...INITIAL_INPUT,
 		claimant: identity
 	})
 	const [errorMessage, setErrorMessage] = useState('')
+
+	const fetchUserCases = async () => {
+		try {
+			const rows: CaseFile[] = await FETCH_CASE_FILES()
+			const result = rows.filter(item => {
+				if (item.claimant === identity) return true
+				if (item.respondant === identity) return true
+				return false
+			})
+			setUserCases(result)
+		} catch (err) {
+			console.warn(err)
+		}
+	}
+
+	useEffect(() => {
+		fetchUserCases()
+	}, [])
 
 	const handleTextChange = (e: any, field: string) => {
 		setErrorMessage('')
@@ -43,11 +61,10 @@ const FileCaseForm = () => {
 		})
 	}
 
-	const handleSelectChange = (value: string[]) => {
+	const handleSelectChange = (value: string) => {
 		setErrorMessage('')		
 		setInput({
-			...input,
-			lang_codes: value
+			...input
 		})
 	}
 
@@ -82,12 +99,14 @@ const FileCaseForm = () => {
 		}
 	}
 
+	console.log('input: ', input)
+
 	return (
 		<Row style={rowStyle} gutter={24}>
 			<Col md={24} sm={24} xs={24} style={colStyle}>
 				<Box
-            title='File New Case'
-            subtitle='Submit a new case file for arbitration'
+            title='Add Case Claim'
+            subtitle='Add a claim to an existing case'
           >
             <ContentHolder>
 							<InputGroup>
@@ -97,17 +116,20 @@ const FileCaseForm = () => {
 								<Input onChange={(e) => handleTextChange(e, 'respondant')} addonBefore='Respondant' placeholder="theiraccount" />
 							</InputGroup>
 							<InputGroup>
-                <Select
-                  mode="multiple"
-                  style={{ width: '100%' }}
-                  placeholder="Please select languages"
-                  defaultValue={[]}
+								<Select
+                  defaultValue="lucy"
                   onChange={handleSelectChange}
+                  placeholder="Please select case ID"
+									addonBefore='Case ID'
+                  style={{ minWidth: '240px' }}
                 >
-									{LANG_CODES_LIST.map((lang: string, index: number) => (
-										<Option key={lang} value={index}>{lang}</Option>
-									))}
-                </Select>		
+                  <Option value="jack">Jack</Option>
+                  <Option value="lucy">Lucy</Option>
+                  <Option value="disabled" disabled>
+                    Disabled
+                  </Option>
+                  <Option value="Yiminghe">yiminghe</Option>
+                </Select>
 							</InputGroup>
 							<InputGroup>
 								<Input onChange={(e) => handleTextChange(e, 'claim_link')} addonBefore='IPFS Hash' placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce" />
@@ -125,4 +147,4 @@ const FileCaseForm = () => {
 	)
 }
 
-export default FileCaseForm
+export default AddClaimForm

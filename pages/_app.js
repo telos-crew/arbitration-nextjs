@@ -10,6 +10,7 @@ import '@glidejs/glide/dist/css/glide.core.min.css';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import '../style/global.css';
+import './index.scss'
 
 class CustomApp extends App {
   render() {

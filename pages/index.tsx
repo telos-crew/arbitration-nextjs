@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Tabs } from 'antd'
 import Head from 'next/head';
 import LayoutWrapper from '@iso/components/utility/layoutWrapper'
 import CaseFilesTable from '../components/cases/CaseFilesTable'
@@ -9,7 +10,9 @@ import Forms from '../containers/Forms/Forms';
 import InputField from './dashboard/inputField';
 import { useSelector } from 'react-redux';
 import { RootState } from '../types'
-// import Widgets from '@iso/containers/Widgets/Widgets';
+import AddClaimForm from '../components/cases/AddClaimForm';
+
+const { TabPane } = Tabs
 
 const Home = () => {
   const { identity } = useSelector((state: RootState) => state.auth)
@@ -22,7 +25,14 @@ const Home = () => {
       <DashboardLayout>
         <LayoutWrapper>
           {!!identity && (
-            <FileCaseForm />
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="File New Case" key="1">
+                <FileCaseForm />
+              </TabPane>
+              <TabPane tab="Add Case Claim" key="2">
+                <AddClaimForm />
+              </TabPane>              
+            </Tabs>            
           )}
           <CaseFilesTable />
           <Forms />
