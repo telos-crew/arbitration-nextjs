@@ -26,7 +26,7 @@ const INITIAL_INPUT = {
 }
 
 const AddClaimForm = () => {
-	const { ADD_CLAIM, FETCH_CASE_FILES } = useBlockchain()
+	const { ADD_CLAIM, REMOVE_CLAIM, FETCH_CASE_FILES } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [userCases, setUserCases] = useState([])
 	const [input, setInput] = useState({
@@ -68,7 +68,7 @@ const AddClaimForm = () => {
 		})
 	}
 
-	const submit = async () => {
+	const submit = async (type: string) => {
 		const { claimant, case_id, claim_link } = input
 		if (!claimant || !case_id || !claim_link) {
 			setErrorMessage('Please fill all the fields')
@@ -84,7 +84,7 @@ const AddClaimForm = () => {
 		}
 
 		try {
-			const url = await ADD_CLAIM(input)
+			const url = type === 'add' ? await ADD_CLAIM(input) : await REMOVE_CLAIM(input)
 			window.open(url, '_self')
 		} catch (err) {
 			console.warn(err)
@@ -128,7 +128,8 @@ const AddClaimForm = () => {
 							</InputGroup>
             </ContentHolder>
 						<br />
-						<Button onClick={submit} type="primary">Submit</Button>
+						<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
+						<Button onClick={() => submit('remove')} danger>Remove</Button>
 						<br /><br />
 						{errorMessage && (
 							<Alert message={errorMessage} type="error" />

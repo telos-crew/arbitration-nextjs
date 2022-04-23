@@ -158,7 +158,13 @@ const useBlockchain = () => {
     return signingRequest
   }
 
-  const ADD_CLAIM = async (data: FileCaseData, callbackRoute?: string): Promise<any> => {
+  type AddClaimData = {
+    case_id: number,
+    claimant: string,
+    claim_link: string,
+  }
+
+  const ADD_CLAIM = async (data: AddClaimData, callbackRoute?: string): Promise<any> => {
     const actions = [
       {
         account: CONFIG[chain].ARBITRACTION_CONTRACT,
@@ -173,7 +179,30 @@ const useBlockchain = () => {
       actions
     })
     return signingRequest
-  }  
+  }
+
+  type RemoveClaimData = {
+    case_id: number,
+    claimant: string,
+    claim_link: string,
+  }
+
+  const REMOVE_CLAIM = async (data: RemoveClaimData, callbackRoute?: string): Promise<any> => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'removeclaim',
+        authorization: GET_AUTHORIZATION(),
+        data
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
+      chainId: CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }    
 
 	return {
 		FETCH_CASE_FILES,
@@ -184,7 +213,8 @@ const useBlockchain = () => {
     FETCH_USER_PROFILE,
 		GET_TABLE_ROWS,
     FILE_CASE,
-    ADD_CLAIM
+    ADD_CLAIM,
+    REMOVE_CLAIM
 	}
 }
 
