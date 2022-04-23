@@ -150,7 +150,6 @@ const useBlockchain = () => {
         data
       }
     ]
-    console.log('actions: ', actions)
     const signingRequest = await CREATE_SIGNING_REQUEST({
       callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
       chainId: CHAIN_ID,
@@ -158,6 +157,23 @@ const useBlockchain = () => {
     })
     return signingRequest
   }
+
+  const ADD_CLAIM = async (data: FileCaseData, callbackRoute?: string): Promise<any> => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'addclaim',
+        authorization: GET_AUTHORIZATION(),
+        data
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
+      chainId: CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }  
 
 	return {
 		FETCH_CASE_FILES,
@@ -168,6 +184,7 @@ const useBlockchain = () => {
     FETCH_USER_PROFILE,
 		GET_TABLE_ROWS,
     FILE_CASE,
+    ADD_CLAIM
 	}
 }
 

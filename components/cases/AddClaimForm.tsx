@@ -26,7 +26,7 @@ const INITIAL_INPUT = {
 }
 
 const AddClaimForm = () => {
-	const { FILE_CASE, FETCH_CASE_FILES } = useBlockchain()
+	const { ADD_CLAIM, FETCH_CASE_FILES } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [userCases, setUserCases] = useState([])
 	const [input, setInput] = useState({
@@ -40,7 +40,6 @@ const AddClaimForm = () => {
 			const rows: CaseFile[] = await FETCH_CASE_FILES()
 			const result = rows.filter(item => {
 				if (item.claimant === identity) return true
-				if (item.respondant === identity) return true
 				return false
 			})
 			setUserCases(result)
@@ -64,13 +63,14 @@ const AddClaimForm = () => {
 	const handleSelectChange = (value: string) => {
 		setErrorMessage('')		
 		setInput({
-			...input
+			...input,
+			case_id: value
 		})
 	}
 
 	const submit = async () => {
-		const { claimant, respondant, lang_codes, claim_link } = input
-		if (!claimant || !respondant || !claim_link) {
+		const { claimant, case_id, claim_link } = input
+		if (!claimant || !case_id || !claim_link) {
 			setErrorMessage('Please fill all the fields')
 			return
 		}
@@ -78,28 +78,18 @@ const AddClaimForm = () => {
 			setErrorMessage('Invalid claimant name')
 			return
 		}
-		if (!validateName(respondant)) {
-			setErrorMessage('Invalid respondant name')
-			return
-		}
 		if (!validateIpfsHash(claim_link)) {
 			setErrorMessage('Invalid IPFS hash, should start with \'Qm\' and be 46 or 49 characters in length')
 			return
 		}
-		if (lang_codes.length === 0) {
-			setErrorMessage('Must select at least one language')
-			return
-		}
 
 		try {
-			const url = await FILE_CASE(input)
+			const url = await ADD_CLAIM(input)
 			window.open(url, '_self')
 		} catch (err) {
 			console.warn(err)
 		}
 	}
-
-	console.log('input: ', input)
 
 	return (
 		<Row style={rowStyle} gutter={24}>
@@ -110,29 +100,31 @@ const AddClaimForm = () => {
           >
             <ContentHolder>
 							<InputGroup>
-              	<Input defaultValue={input.claimant} onChange={(e) => handleTextChange(e, 'claimant')} addonBefore='Claimant' placeholder="myaccount111" />
-							</InputGroup>
-							<InputGroup>
-								<Input onChange={(e) => handleTextChange(e, 'respondant')} addonBefore='Respondant' placeholder="theiraccount" />
+              	<Input
+									defaultValue={input.claimant}
+									onChange={(e) => handleTextChange(e, 'claimant')}
+									addonBefore='Claimant'
+									placeholder="myaccount111"
+								/>
 							</InputGroup>
 							<InputGroup>
 								<Select
-                  defaultValue="lucy"
                   onChange={handleSelectChange}
                   placeholder="Please select case ID"
 									addonBefore='Case ID'
                   style={{ minWidth: '240px' }}
                 >
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="disabled" disabled>
-                    Disabled
-                  </Option>
-                  <Option value="Yiminghe">yiminghe</Option>
+									{userCases.map((item) => (
+										<Option key={item.case_id} value={item.case_id}>{item.case_id}</Option>
+									))}
                 </Select>
 							</InputGroup>
 							<InputGroup>
-								<Input onChange={(e) => handleTextChange(e, 'claim_link')} addonBefore='IPFS Hash' placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce" />
+								<Input
+									onChange={(e) => handleTextChange(e, 'claim_link')}
+									addonBefore='IPFS Hash'
+									placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
+								/>
 							</InputGroup>
             </ContentHolder>
 						<br />
