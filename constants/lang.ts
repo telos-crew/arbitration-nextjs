@@ -10,6 +10,8 @@ export const LANG_CODES: {[key: string]: string} = {
 		SWED: '8'
 }
 
+export const LANG_CODES_LIST = ['ENGL', 'FRCH', 'GRMN', 'KREA', 'JAPN', 'CHNA', 'SPAN', 'PGSE', 'SWED']
+
 export const GET_LANG_CODES = (): { lang: string, code: string }[] => {
 	const langList: { lang: string, code: string }[] = []
 	for (const lang in LANG_CODES) {

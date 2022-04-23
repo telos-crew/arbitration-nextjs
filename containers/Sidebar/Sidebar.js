@@ -115,7 +115,6 @@ export default function Sidebar(props) {
             // inlineCollapsed={isCollapsed}
           >
             {SIDEBAR_MENU_OPTIONS.map((option) => {
-              console.log('option', option);
               return (
                 <SidebarMenu
                   key={option.key}
