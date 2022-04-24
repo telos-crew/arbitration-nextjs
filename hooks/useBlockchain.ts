@@ -160,6 +160,40 @@ const useBlockchain = () => {
     return signingRequest
   }
 
+  const READY_CASE = async (case_id: number, callbackRoute?: string): Promise<any> => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'readycase',
+        authorization: GET_AUTHORIZATION(),
+        data: { case_id, claimant: identity }
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
+      chainId: CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }
+
+  const SHRED_CASE = async (case_id: number, callbackRoute?: string): Promise<any> => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'shredcase',
+        authorization: GET_AUTHORIZATION(),
+        data: { case_id, claimant: identity }
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
+      chainId: CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }
+
   const FETCH_CLAIMS = async (case_id: number): Promise<Claim[]> => {
     const { rows } = await GET_TABLE_ROWS({
       code: CONFIG[chain].ARBITRACTION_CONTRACT,
@@ -182,23 +216,6 @@ const useBlockchain = () => {
         name: 'addclaim',
         authorization: GET_AUTHORIZATION(),
         data
-      }
-    ]
-    const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
-      actions
-    })
-    return signingRequest
-  }
-
-  const SHRED_CASE = async (case_id: number, callbackRoute?: string): Promise<any> => {
-    const actions = [
-      {
-        account: CONFIG[chain].ARBITRACTION_CONTRACT,
-        name: 'shredcase',
-        authorization: GET_AUTHORIZATION(),
-        data: { case_id, claimant: identity }
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
@@ -242,6 +259,7 @@ const useBlockchain = () => {
 		FETCH_CASE_FILES,
     FILE_CASE,
     SHRED_CASE,
+    READY_CASE,
     FETCH_CLAIMS,
     ADD_CLAIM,
     REMOVE_CLAIM

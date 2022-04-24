@@ -5,11 +5,12 @@ import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import FileCaseModal from './FileCaseModal';
 import ClaimsModal from './ClaimsModal';
-import { RootState } from '../../types';
+import { CaseFile, RootState } from '../../types';
+import { CASE_STATUS_LIST } from '../../constants/case';
 
 const CaseFilesTable = () => {
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const { FETCH_CASE_FILES, SHRED_CASE } = useBlockchain()
+	const { FETCH_CASE_FILES, SHRED_CASE, READY_CASE } = useBlockchain()
 	const [caseFiles, setCaseFiles] = useState()
 	const [isFileCaseModalVisible, setIsFilecaseModalVisible] = useState(false)
 	const [isClaimsModalVisible, setIsClaimsModalVisible] = useState(false)
@@ -23,6 +24,9 @@ const CaseFilesTable = () => {
 		title: 'Status',
 		dataIndex: 'case_status',
 		key: 'case_status',
+		render: (text: string, record: CaseFile) => (
+			<span>{CASE_STATUS_LIST[record.case_status]}</span>
+		)
 	},{
 		title: 'Claimant',
 		dataIndex: 'claimant',
@@ -64,6 +68,10 @@ const CaseFilesTable = () => {
 		render: (text: string, record: any) => (
 			identity === record.claimant && (
 				<>
+				{record.case_status === 0 && (
+					<Button onClick={() => onClickStartCase(record.case_id)} type='primary'>Start Case</Button>
+				)}
+					&nbsp;&nbsp;
 					<Button onClick={() => onClickDelete(record.case_id)} danger>Delete</Button>
 				</>
 			)
@@ -89,6 +97,17 @@ const CaseFilesTable = () => {
 		console.log('openClaimsModal, record: ', record)
 		setIsClaimsModalVisible(true)
 		setActiveCaseId(record.case_id)
+	}
+
+	const onClickStartCase = async (case_id: number) => {
+		if (confirm(`Are you sure you want to start this case (id: ${case_id})?`)) {
+			try {
+				const url = await READY_CASE(case_id)
+				window.open(url, '_self')
+			} catch (err) {
+				console.warn(err)
+			}
+		}
 	}
 
 	const onClickDelete = async (case_id: number) => {

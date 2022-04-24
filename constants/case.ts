@@ -9,3 +9,15 @@ export const CASE_STATUS = {
 	7: 'Resolved',			// 7
 	8: 'Dismissed'			// 8 NOTE: Dismissed cases advance and stop here	
 }
+
+export const CASE_STATUS_LIST = [
+	'Case Setup',			// 0
+	'Awaiting Arbs',		// 1
+	'Case Investigation', // 2
+	'Hearing',			// 3
+	'Deliberation',		// 4
+	'Decision',			// 5 NOTNo more joinders allowed
+	'Enforcement',		// 6
+	'Resolved',			// 7
+	'Dismissed'			// 8 NOTE: Dismissed cases advance and stop here	
+]
