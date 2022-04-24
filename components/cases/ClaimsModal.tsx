@@ -82,6 +82,15 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 	useEffect(() => {
 		fetchClaims()
 		fetchCaseFile()
+
+		const interval = setInterval(() => {
+			fetchClaims()
+			fetchCaseFile()
+		}, 1000)
+
+		return () => {
+			clearInterval(interval)
+		}
 	}, [])
 
 	const onRemoveClaim = async ({ claim_id }: Claim) => {

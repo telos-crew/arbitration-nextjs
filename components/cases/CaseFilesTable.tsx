@@ -91,6 +91,11 @@ const CaseFilesTable = () => {
 
 	useEffect(() => {
 		fetchCaseFiles()
+		const interval = setInterval(fetchCaseFiles, 1000)
+
+		return () => {
+			clearInterval(interval)
+		}
 	}, [])
 
 	const openClaimsModal = (record: any) => {
