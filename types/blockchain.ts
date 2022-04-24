@@ -19,3 +19,12 @@ export type CaseFile = {
 	respondant: string,
 	number_claims: number
 }
+
+export type Claim = {
+	claim_id: number,
+	claim_summary: string,
+	decision_link: string,
+	response_link: string,
+	status: number,
+	decision_class: number
+}

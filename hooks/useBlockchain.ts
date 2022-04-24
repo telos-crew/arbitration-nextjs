@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { SigningRequest } from 'eosio-signing-request'
 import axios from 'axios'
-import { TableRowsConfig } from '../types'
+import { Claim, TableRowsConfig } from '../types'
 import { getEsrOptions } from '../constants/esr'
 import { RootState } from '../types/redux'
 
@@ -158,6 +158,15 @@ const useBlockchain = () => {
     return signingRequest
   }
 
+  const FETCH_CLAIMS = async (case_id: number): Promise<Claim[]> => {
+    const { rows } = await GET_TABLE_ROWS({
+      code: CONFIG[chain].ARBITRACTION_CONTRACT,
+      scope: case_id,
+      table: 'claims'
+    })
+    return rows
+  }
+
   type AddClaimData = {
     case_id: number,
     claimant: string,
@@ -205,14 +214,15 @@ const useBlockchain = () => {
   }    
 
 	return {
-		FETCH_CASE_FILES,
-		GET_AUTHORIZATION,
+    GET_AUTHORIZATION,
     CREATE_SIGNING_REQUEST,
 		GET_TRX_WEB_LINK,
 		CREATE_IDENTITY_REQUEST,
     FETCH_USER_PROFILE,
 		GET_TABLE_ROWS,
+		FETCH_CASE_FILES,
     FILE_CASE,
+    FETCH_CLAIMS,
     ADD_CLAIM,
     REMOVE_CLAIM
 	}
