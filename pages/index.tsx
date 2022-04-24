@@ -24,7 +24,7 @@ const Home = () => {
       </Head>
       <DashboardLayout>
         <LayoutWrapper>
-          {!!identity && (
+          {/* {!!identity && (
             <Tabs defaultActiveKey="1">
               <TabPane tab="File New Case" key="1">
                 <FileCaseForm />
@@ -36,7 +36,7 @@ const Home = () => {
                 <AddClaimForm />
               </TabPane>
             </Tabs>            
-          )}
+          )} */}
           <CaseFilesTable />
           <Forms />
         </LayoutWrapper>
