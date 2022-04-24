@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Card, Typography, Row, Table } from "antd"
+import { Col, Card, Typography, Row, Table, Button } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
 import useBlockchain from '../../hooks/useBlockchain';
+import AddClaimModal from './FileCaseModal';
+import { useSelector } from 'react-redux';
+import FileCaseModal from './FileCaseModal';
 
 const columns = [{
 	title: 'ID',
@@ -46,8 +49,10 @@ const columns = [{
 },]
 
 const CaseFilesTable = () => {
+	const { identity } = useSelector((state: RootState) => state.auth)
 	const { FETCH_CASE_FILES } = useBlockchain()
 	const [caseFiles, setCaseFiles] = useState()
+	const [isFileCaseModalVisible, setIsFilecaseModalVisible] = useState(false)
 
 	const { rowStyle, colStyle } = basicStyle;
 
@@ -68,9 +73,18 @@ const CaseFilesTable = () => {
 		<Row style={rowStyle} gutter={24}>
 			<Col md={24} sm={24} xs={24} style={colStyle}>
 				<Card variant="outlined">
+					{!!identity && (
+						<>
+							<Button onClick={() => setIsFilecaseModalVisible(!isFileCaseModalVisible)} type="primary">File New Case</Button>
+							<br /><br />
+						</>
+					)}
 					<Table columns={columns} dataSource={caseFiles} />
 				</Card>
 			</Col>
+			{!!identity && (
+				<FileCaseModal isVisible={isFileCaseModalVisible} toggle={() => setIsFilecaseModalVisible(!isFileCaseModalVisible)} />
+			)}
 		</Row>
 	)
 }
