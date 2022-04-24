@@ -44,11 +44,12 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 	},{
 		title: 'Status',
 		dataIndex: 'status',
-		key: 'status',
+		key: 'status'
 	},{
 		title: 'Decision Class',
 		dataIndex: 'decision_class',
 		key: 'decision_class',
+		render: (text: string) => <span>{DECISION_CLASS_LIST[text]}</span>
 	},{
 		title: 'Actions',
 		key: 'actions',
