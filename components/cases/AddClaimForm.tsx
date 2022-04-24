@@ -84,7 +84,14 @@ const AddClaimForm = () => {
 		}
 
 		try {
-			const url = type === 'add' ? await ADD_CLAIM(input) : await REMOVE_CLAIM(input)
+			let url
+			if (type === 'add') {
+				url = await ADD_CLAIM(input)
+			} else {
+				if (confirm('Are you sure you want to delete this claim?') == true) {
+					url = await REMOVE_CLAIM(input)
+				}
+			}
 			window.open(url, '_self')
 		} catch (err) {
 			console.warn(err)

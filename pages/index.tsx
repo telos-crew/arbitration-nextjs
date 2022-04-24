@@ -29,9 +29,12 @@ const Home = () => {
               <TabPane tab="File New Case" key="1">
                 <FileCaseForm />
               </TabPane>
-              <TabPane tab="Add Case Claim" key="2">
+              <TabPane tab="Add / Remove Case Claim" key="2">
                 <AddClaimForm />
-              </TabPane>              
+              </TabPane>
+              <TabPane tab="Delete Case" key="3">
+                <AddClaimForm />
+              </TabPane>
             </Tabs>            
           )}
           <CaseFilesTable />
