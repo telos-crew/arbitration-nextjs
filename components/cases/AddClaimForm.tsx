@@ -32,43 +32,17 @@ type Props = {
 const AddClaimForm = ({ onCancel, case_id }: Props) => {
 	const { ADD_CLAIM, REMOVE_CLAIM, FETCH_CASE_FILES } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const [userCases, setUserCases] = useState([])
 	const [input, setInput] = useState({
 		...INITIAL_INPUT,
 		claimant: identity
 	})
 	const [errorMessage, setErrorMessage] = useState('')
 
-	const fetchUserCases = async () => {
-		try {
-			const rows: CaseFile[] = await FETCH_CASE_FILES()
-			const result = rows.filter(item => {
-				if (item.claimant === identity) return true
-				return false
-			})
-			setUserCases(result)
-		} catch (err) {
-			console.warn(err)
-		}
-	}
-
-	useEffect(() => {
-		fetchUserCases()
-	}, [])
-
 	const handleTextChange = (e: any, field: string) => {
 		setErrorMessage('')
 		setInput({
 			...input,
 			[field]: e.target.value
-		})
-	}
-
-	const handleSelectChange = (value: string) => {
-		setErrorMessage('')		
-		setInput({
-			...input,
-			case_id
 		})
 	}
 
@@ -88,14 +62,7 @@ const AddClaimForm = ({ onCancel, case_id }: Props) => {
 		}
 
 		try {
-			let url
-			if (type === 'add') {
-				url = await ADD_CLAIM(input)
-			} else {
-				if (confirm('Are you sure you want to delete this claim?') == true) {
-					url = await REMOVE_CLAIM(input)
-				}
-			}
+			const url = await ADD_CLAIM({ ...input, case_id })
 			window.open(url, '_self')
 		} catch (err) {
 			console.warn(err)
