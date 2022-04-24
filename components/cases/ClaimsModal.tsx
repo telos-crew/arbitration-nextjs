@@ -5,6 +5,7 @@ import { RootState } from '../../types';
 import useBlockchain from '../../hooks/useBlockchain';
 import AddClaimForm from './AddClaimForm';
 import { Claim } from '../../types/blockchain';
+import { DECISION_CLASS_LIST, CASE_STATUS_LIST } from '../../constants/claim';
 
 type Props = {
 	isVisible: boolean,
