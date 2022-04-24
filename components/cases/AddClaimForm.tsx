@@ -4,17 +4,13 @@ import basicStyle from "@iso/assets/styles/constants"
 import Input, {
   InputGroup,
 } from '@iso/components/uielements/input';
-import Select, { SelectOption } from '@iso/components/uielements/select';
 import Box from '@iso/components/utility/box';
 import ContentHolder from '@iso/components/utility/contentHolder';
-import IntlMessages from '@iso/components/utility/intlMessages';
 import { validateName, validateIpfsHash } from '../../util/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
-import { CaseFile } from '../../types/blockchain';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
 
-const Option = SelectOption;
 const { rowStyle, colStyle } = basicStyle;
 
 // name claimant, string claim_link, vector<uint8_t> lang_codes,std::optional<name> respondant
@@ -30,7 +26,7 @@ type Props = {
 }
 
 const AddClaimForm = ({ onCancel, case_id }: Props) => {
-	const { ADD_CLAIM, REMOVE_CLAIM, FETCH_CASE_FILES } = useBlockchain()
+	const { ADD_CLAIM } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [input, setInput] = useState({
 		...INITIAL_INPUT,
