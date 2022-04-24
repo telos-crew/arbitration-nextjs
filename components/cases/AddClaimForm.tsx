@@ -22,10 +22,12 @@ const INITIAL_INPUT = {
 
 type Props = {
 	onCancel: () => void,
-	case_id: number
+	case_id: number,
+	isVisible: boolean,
+	toggle: () => void
 }
 
-const AddClaimForm = ({ onCancel, case_id }: Props) => {
+const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 	const { ADD_CLAIM } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [input, setInput] = useState({
@@ -60,13 +62,14 @@ const AddClaimForm = ({ onCancel, case_id }: Props) => {
 		try {
 			const url = await ADD_CLAIM({ ...input, case_id })
 			window.open(url, '_self')
+			toggle()
 		} catch (err) {
 			console.warn(err)
 		}
 	}
 
 	return (
-		<Row style={rowStyle} gutter={24}>
+		<Row style={{ ...rowStyle, display: !isVisible ? 'none' : 'flex' }} gutter={24}>
 			<Col md={24} sm={24} xs={24} style={colStyle}>
 				<Box
             title='Add Case Claim'

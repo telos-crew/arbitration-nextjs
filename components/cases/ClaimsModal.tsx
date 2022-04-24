@@ -86,7 +86,7 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 		const interval = setInterval(() => {
 			fetchClaims()
 			fetchCaseFile()
-		}, 1000)
+		}, 10000)
 
 		return () => {
 			clearInterval(interval)
@@ -108,13 +108,21 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 
 	return (
 		<Modal title="Claims" visible={isVisible} onOk={toggle} onCancel={toggle} className='claimsModal'>
-			{isAddClaimFormVisible ? (
-				<AddClaimForm onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} case_id={caseFile.case_id} />
-				) : (
-					<>
+			{!!caseFile && (
+				<>
+					<AddClaimForm
+						onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)}
+						case_id={caseFile.case_id}
+						isVisible={isAddClaimFormVisible}
+						toggle={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)}
+					/>
+				</>
+			)}
+			{!isAddClaimFormVisible && (
+				<div>
 					<Button onClick={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} type='primary'>Add New Claim</Button><br /><br />
 					<Table columns={columns} dataSource={claims} key={'claim_id'} />
-					</>
+				</div>
 			)}
 		</Modal>
 	)
