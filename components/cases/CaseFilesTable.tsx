@@ -7,6 +7,7 @@ import FileCaseModal from './FileCaseModal';
 import ClaimsModal from './ClaimsModal';
 import { CaseFile, RootState } from '../../types';
 import { CASE_STATUS_LIST } from '../../constants/case';
+import { LANG_CODES_LIST } from '../../constants/lang';
 
 const CaseFilesTable = () => {
 	const { identity } = useSelector((state: RootState) => state.auth)
@@ -54,6 +55,11 @@ const CaseFilesTable = () => {
 		title: 'Languages',
 		dataIndex: 'required_langs',
 		key: 'required_langs',
+		render: (text: string, { required_langs }: CaseFile) => (
+			<>
+				<span>{required_langs.map((langCode: number) => `${LANG_CODES_LIST[langCode]} `)}</span>
+			</>
+		)
 	},{
 		title: 'Ruling',
 		dataIndex: 'case_ruling',
@@ -91,7 +97,7 @@ const CaseFilesTable = () => {
 
 	useEffect(() => {
 		fetchCaseFiles()
-		const interval = setInterval(fetchCaseFiles, 1000)
+		const interval = setInterval(fetchCaseFiles, 10000)
 
 		return () => {
 			clearInterval(interval)
@@ -125,6 +131,8 @@ const CaseFilesTable = () => {
 			}
 		}
 	}
+
+	console.log('caseFiles: ', caseFiles)
 
 	return (
 		<Row style={rowStyle} gutter={24}>
