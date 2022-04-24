@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Card, Typography, Row, Table, Button } from "antd"
+import { Col, Card, Row, Table, Button } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
 import useBlockchain from '../../hooks/useBlockchain';
-import AddClaimModal from './FileCaseModal';
 import { useSelector } from 'react-redux';
 import FileCaseModal from './FileCaseModal';
 import ClaimsModal from './ClaimsModal';
@@ -10,11 +9,11 @@ import { RootState } from '../../types';
 
 const CaseFilesTable = () => {
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const { FETCH_CASE_FILES } = useBlockchain()
+	const { FETCH_CASE_FILES, SHRED_CASE } = useBlockchain()
 	const [caseFiles, setCaseFiles] = useState()
 	const [isFileCaseModalVisible, setIsFilecaseModalVisible] = useState(false)
 	const [isClaimsModalVisible, setIsClaimsModalVisible] = useState(false)
-	const [activeClaimKey, setActiveClaimKey] = useState(null)
+	const [activeCaseId, setActiveCaseId] = useState(null)
 
 	const columns = [{
 		title: 'ID',
@@ -59,7 +58,17 @@ const CaseFilesTable = () => {
 		title: 'Last Updated',
 		dataIndex: 'update_ts',
 		key: 'update_ts',
-	},]
+	},{
+		title: 'Actions',
+		key: 'actions',
+		render: (text: string, record: any) => (
+			identity === record.claimant && (
+				<>
+					<Button onClick={() => onClickDelete(record.case_id)} danger>Delete</Button>
+				</>
+			)
+		)
+	}]
 
 	const { rowStyle, colStyle } = basicStyle;
 
@@ -79,7 +88,18 @@ const CaseFilesTable = () => {
 	const openClaimsModal = (record: any) => {
 		console.log('openClaimsModal, record: ', record)
 		setIsClaimsModalVisible(true)
-		setActiveClaimKey(record.case_id)
+		setActiveCaseId(record.case_id)
+	}
+
+	const onClickDelete = async (case_id: number) => {
+		if (confirm(`Are you sure you want to delete this case (id: ${case_id})?`)) {
+			try {
+				const url = await SHRED_CASE(case_id)
+				window.open(url, '_self')
+			} catch (err) {
+				console.warn(err)
+			}
+		}
 	}
 
 	return (
@@ -99,7 +119,7 @@ const CaseFilesTable = () => {
 				<FileCaseModal isVisible={isFileCaseModalVisible} toggle={() => setIsFilecaseModalVisible(!isFileCaseModalVisible)} />
 			)}
 			{isClaimsModalVisible && (
-				<ClaimsModal isVisible={isClaimsModalVisible} toggle={() => setIsClaimsModalVisible(!isClaimsModalVisible)} case_id={activeClaimKey} />
+				<ClaimsModal isVisible={isClaimsModalVisible} toggle={() => setIsClaimsModalVisible(!isClaimsModalVisible)} case_id={activeCaseId} />
 			)}
 		</Row>
 	)
