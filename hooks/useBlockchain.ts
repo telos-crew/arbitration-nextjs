@@ -125,11 +125,13 @@ const useBlockchain = () => {
 		return data
 	}
 
-	const FETCH_CASE_FILES = async (): Promise<any> => {
+	const FETCH_CASE_FILES = async (case_id?: number): Promise<any> => {
 		const { rows } = await GET_TABLE_ROWS({
 			code: CONFIG[chain].ARBITRACTION_CONTRACT,
 			scope: CONFIG[chain].ARBITRACTION_CONTRACT,
-			table: 'casefiles'
+			table: 'casefiles',
+      upper_bound: case_id,
+      lower_bound: case_id
 		});
 		return rows
 	}

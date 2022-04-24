@@ -3,6 +3,8 @@ import { Col, Card, Typography, Row, Table, Button, Modal } from "antd"
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
 import useBlockchain from '../../hooks/useBlockchain';
+import AddClaimForm from './AddClaimForm';
+import { Claim } from '../../types/blockchain';
 
 type Props = {
 	isVisible: boolean,
@@ -11,8 +13,12 @@ type Props = {
 }
 
 const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
-	const { FETCH_CLAIMS } = useBlockchain()
+	const { FETCH_CLAIMS, FETCH_CASE_FILES, REMOVE_CLAIM } = useBlockchain()
+	const { identity } = useSelector((state: RootState) => state.auth)
+	const [caseFile, setCaseFile] = useState(null)
 	const [claims, setClaims] = useState(null)
+	const [isAddClaimFormVisible, setIsAddClaimFormVisible] = useState(false)
+
 	const columns = [{
 		title: 'Case ID',
 		dataIndex: 'case_id',
@@ -42,7 +48,15 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 		title: 'Decision Class',
 		dataIndex: 'decision_class',
 		key: 'decision_class',
-	},]
+	},{
+		title: 'Actions',
+		key: 'actions',
+		render: (text: any, claim: Claim) => (
+			caseFile && (caseFile.claimant === identity) && (
+				<><Button onClick={() => onRemoveClaim(claim)} danger>Delete</Button></>
+			)
+		)
+	}]
 
 	const fetchClaims = async () => {
 		try {
@@ -54,13 +68,43 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 		}
 	}
 
+	const fetchCaseFile = async () => {
+		try {
+			const [response] = await FETCH_CASE_FILES(case_id)
+			setCaseFile(response)
+		} catch (err) {
+			console.warn(err)
+		}
+	}
+
 	useEffect(() => {
 		fetchClaims()
+		fetchCaseFile()
 	}, [])
+
+	const onRemoveClaim = async ({ claim_id }: Claim) => {
+		try {
+			const url = await REMOVE_CLAIM({
+				claim_id,
+				claimant: caseFile.claimant,
+				case_id
+			})
+			window.open(url, '_self')
+		} catch (err) {
+			console.warn(err)
+		}
+	}
 
 	return (
 		<Modal title="Claims" visible={isVisible} onOk={toggle} onCancel={toggle} className='claimsModal'>
-			<Table columns={columns} dataSource={claims} />
+			{isAddClaimFormVisible ? (
+				<AddClaimForm onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} case_id={caseFile.case_id} />
+				) : (
+					<>
+					<Button onClick={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} type='primary'>Add New Claim</Button><br /><br />
+					<Table columns={columns} dataSource={claims} key={'claim_id'} />
+					</>
+			)}
 		</Modal>
 	)
 }

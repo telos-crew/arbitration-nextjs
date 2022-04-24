@@ -92,7 +92,7 @@ const CaseFilesTable = () => {
 							<br /><br />
 						</>
 					)}
-					<Table columns={columns} dataSource={caseFiles} />
+					<Table columns={columns} dataSource={caseFiles} key={'case_id'} />
 				</Card>
 			</Col>
 			{!!identity && (

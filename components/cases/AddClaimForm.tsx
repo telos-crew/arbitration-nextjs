@@ -20,12 +20,16 @@ const { rowStyle, colStyle } = basicStyle;
 // name claimant, string claim_link, vector<uint8_t> lang_codes,std::optional<name> respondant
 
 const INITIAL_INPUT = {
-	case_id: null,
 	claim_link: '',
 	claimant: ''
 }
 
-const AddClaimForm = () => {
+type Props = {
+	onCancel: () => void,
+	case_id: number
+}
+
+const AddClaimForm = ({ onCancel, case_id }: Props) => {
 	const { ADD_CLAIM, REMOVE_CLAIM, FETCH_CASE_FILES } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [userCases, setUserCases] = useState([])
@@ -64,13 +68,13 @@ const AddClaimForm = () => {
 		setErrorMessage('')		
 		setInput({
 			...input,
-			case_id: value
+			case_id
 		})
 	}
 
 	const submit = async (type: string) => {
-		const { claimant, case_id, claim_link } = input
-		if (!claimant || !case_id || !claim_link) {
+		const { claimant, claim_link } = input
+		if (!claimant || !claim_link) {
 			setErrorMessage('Please fill all the fields')
 			return
 		}
@@ -115,18 +119,6 @@ const AddClaimForm = () => {
 								/>
 							</InputGroup>
 							<InputGroup>
-								<Select
-                  onChange={handleSelectChange}
-                  placeholder="Please select case ID"
-									addonBefore='Case ID'
-                  style={{ minWidth: '240px' }}
-                >
-									{userCases.map((item) => (
-										<Option key={item.case_id} value={item.case_id}>{item.case_id}</Option>
-									))}
-                </Select>
-							</InputGroup>
-							<InputGroup>
 								<Input
 									onChange={(e) => handleTextChange(e, 'claim_link')}
 									addonBefore='IPFS Hash'
@@ -136,7 +128,7 @@ const AddClaimForm = () => {
             </ContentHolder>
 						<br />
 						<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
-						<Button onClick={() => submit('remove')} danger>Remove</Button>
+						<Button onClick={onCancel}>Cancel</Button>
 						<br /><br />
 						{errorMessage && (
 							<Alert message={errorMessage} type="error" />
