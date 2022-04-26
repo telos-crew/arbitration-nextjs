@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Col, Card, Row, Table, Button } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
-import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
-import FileCaseModal from './FileCaseModal';
-import ClaimsModal from './ClaimsModal';
 import { CaseFile, RootState } from '../../types';
-import { CASE_STATUS_LIST } from '../../constants/case';
-import { LANG_CODES_LIST } from '../../constants/lang';
 import { ELECTION_STATUS } from '../../constants/elections';
 
 const { rowStyle, colStyle } = basicStyle;
