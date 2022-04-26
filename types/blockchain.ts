@@ -28,3 +28,16 @@ export type Claim = {
 	status: number,
 	decision_class: number
 }
+
+export type Election = {
+	election_id: 3,
+	ballot_name: string,
+	info_url: string,
+	candidates: { name: string, value: string}[],
+	available_seats: number,
+	begin_add_candidates_ts: string,
+	end_add_candidates_ts: string,
+	begin_voting_ts: string,
+	end_voting_ts: string,
+	status: number
+}

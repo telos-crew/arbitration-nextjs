@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Col, Card, Row, Table, Button } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
 import { useSelector } from 'react-redux';
-import { CaseFile, RootState } from '../../types';
+import { RootState } from '../../types';
 import { ELECTION_STATUS } from '../../constants/elections';
+import { Election } from '../../types/blockchain';
 
 const { rowStyle, colStyle } = basicStyle;
 
 type Props = {
-	elections: any[]
+	elections: Election[]
 }
 
 const ElectionsTable = ({ elections }: Props) => {
