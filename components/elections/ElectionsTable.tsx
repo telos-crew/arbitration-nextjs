@@ -8,6 +8,7 @@ import ClaimsModal from './ClaimsModal';
 import { CaseFile, RootState } from '../../types';
 import { CASE_STATUS_LIST } from '../../constants/case';
 import { LANG_CODES_LIST } from '../../constants/lang';
+import { ELECTION_STATUS } from '../../constants/elections';
 
 const { rowStyle, colStyle } = basicStyle;
 
@@ -60,7 +61,8 @@ const ElectionsTable = ({ elections }: Props) => {
 	},{
 		title: 'Status',
 		dataIndex: 'status',
-		key: 'status'
+		key: 'status',
+		render: (text) => <span>{ELECTION_STATUS[text]}</span>
 	},]
 
 	return (

@@ -11,3 +11,10 @@ export const FETCH_ELECTIONS = async () => {
 	})
 	return rows
 }
+
+export const ELECTION_STATUS = [
+	'Open',
+	'Passed',
+	'Failed',
+	'Closed'
+]
