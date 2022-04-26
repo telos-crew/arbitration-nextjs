@@ -20,7 +20,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>Telos Arbitration</title>
+        <title>Cases | Telos Arbitration</title>
       </Head>
       <DashboardLayout>
         <LayoutWrapper>

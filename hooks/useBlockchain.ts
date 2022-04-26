@@ -249,6 +249,16 @@ const useBlockchain = () => {
     return signingRequest
   }    
 
+  const FETCH_ELECTIONS = async () => {
+    const data = await GET_TABLE_ROWS({
+      code: CONFIG[chain].ARBITRACTION_CONTRACT,
+      scope: CONFIG[chain].ARBITRACTION_CONTRACT,
+      table: 'elections'
+    })
+    console.log('FETCH_ELECTIONS data: ', data)
+    return data
+  }
+
 	return {
     GET_AUTHORIZATION,
     CREATE_SIGNING_REQUEST,
@@ -262,7 +272,8 @@ const useBlockchain = () => {
     READY_CASE,
     FETCH_CLAIMS,
     ADD_CLAIM,
-    REMOVE_CLAIM
+    REMOVE_CLAIM,
+    FETCH_ELECTIONS
 	}
 }
 

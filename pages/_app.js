@@ -12,19 +12,16 @@ import 'react-quill/dist/quill.core.css';
 import '../style/global.css';
 import './index.scss'
 
-class CustomApp extends App {
-  render() {
-    const { Component, pageProps, store } = this.props;
-    return (
-      <Provider store={store}>
-        <Web3Provider>
-          <ThemeProvider>
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </Web3Provider>
-      </Provider>
-    );
-  }
+const MyApp = ({ Component, pageProps, store }) => {
+  return (
+    <Provider store={store}>
+      <Web3Provider>
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </Web3Provider>
+    </Provider>
+  );
 }
 
-export default withRedux(initStore)(CustomApp);
+export default withRedux(initStore)(MyApp);
