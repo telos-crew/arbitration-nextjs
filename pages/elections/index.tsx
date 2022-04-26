@@ -6,18 +6,13 @@ import DashboardLayout from '../../containers/DashboardLayout/DashboardLayout'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types'
 import ElectionsTable from '../../components/elections/ElectionsTable';
-import useBlockchain from '../../hooks/useBlockchain';
-import { useRouter } from 'next/router';
 import { FETCH_ELECTIONS } from '../../constants/elections';
 
 type Props = {
   elections: any[]
 }
 
-function Elections(props) {
-  const { query } = useRouter()
-  console.log('elections page props: ', props)
-  console.log('elections page query: ', query)
+function Elections({ elections }: Props) {
   const { identity } = useSelector((state: RootState) => state.auth)
 
   return (
@@ -27,7 +22,7 @@ function Elections(props) {
       </Head>
       <DashboardLayout>
         <LayoutWrapper>
-          <ElectionsTable />
+          <ElectionsTable elections={elections} />
         </LayoutWrapper>
       </DashboardLayout>
     </>
