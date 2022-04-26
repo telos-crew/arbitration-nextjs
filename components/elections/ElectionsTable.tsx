@@ -64,8 +64,8 @@ const ElectionsTable = ({ elections }: Props) => {
 	return (
 		<Row style={rowStyle} gutter={24}>
 			<Col md={24} sm={24} xs={24} style={colStyle}>
-				<Card variant="outlined">
-					<Table columns={columns} dataSource={elections} key={'case_id'} />
+				<Card title='Elections' variant="outlined">
+					<Table columns={columns} dataSource={elections} key={'election_id'} />
 				</Card>
 			</Col>
 		</Row>

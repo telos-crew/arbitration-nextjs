@@ -5,3 +5,21 @@
 .claimsModal {
 	width: 80% !important;
 }
+
+.nominees-table-wrap {
+	.nominees-table {
+		.ipfs-link {
+			width: 160px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+}
+
+.ipfs-ellipsis {
+	width: 160px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

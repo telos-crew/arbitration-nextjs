@@ -41,3 +41,9 @@ export type Election = {
 	end_voting_ts: string,
 	status: number
 }
+
+export type Nominee = {
+	nominee_name: string,
+	credentials_link: string,
+	application_time: string
+}
