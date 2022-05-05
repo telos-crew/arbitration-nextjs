@@ -6,8 +6,8 @@ import DashboardLayout from '../../containers/DashboardLayout/DashboardLayout'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types'
 import ElectionsTable from '../../components/elections/ElectionsTable';
-import { FETCH_ELECTIONS, FETCH_NOMINEES } from '../../constants/elections';
-import { Election, Nominee } from '../../types/blockchain';
+import { FETCH_ELECTIONS, FETCH_NOMINEES, FETCH_CONFIG } from '../../constants';
+import { Election, Nominee, Config } from '../../types';
 import NomineesTable from '../../components/elections/NomineesTable';
 import basicStyle from "@iso/assets/styles/constants"
 
@@ -15,10 +15,11 @@ const { rowStyle, colStyle } = basicStyle
 
 type Props = {
   elections: Election[],
-  nominees: Nominee[]
+  nominees: Nominee[],
+  config: Config
 }
 
-function Elections({ elections, nominees }: Props) {
+function Elections({ elections, nominees, config }: Props) {
   console.log('nominees: ', nominees)
   const { identity } = useSelector((state: RootState) => state.auth)
 
@@ -31,7 +32,7 @@ function Elections({ elections, nominees }: Props) {
         <LayoutWrapper>
           <Row style={rowStyle} gutter={24}>
 			      <Col md={12} sm={12} xs={24} style={colStyle}>
-              <NomineesTable nominees={nominees} />
+              <NomineesTable nominees={nominees} elections={elections} config={config} />
             </Col>
           </Row>
           <ElectionsTable elections={elections} />
@@ -44,12 +45,14 @@ function Elections({ elections, nominees }: Props) {
 export async function getServerSideProps() {
   const electionsPromise = FETCH_ELECTIONS()
   const nomineesPromise = FETCH_NOMINEES()
-  const [elections, nominees] = await Promise.all([electionsPromise, nomineesPromise])
+  const configPromise = FETCH_CONFIG()
+  const [elections, nominees, config] = await Promise.all([electionsPromise, nomineesPromise, configPromise])
 
 	return {
 		props: {
 			elections,
-      nominees
+      nominees,
+      config
 		}
 	}
 }

@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Card, Row, Table, Button } from "antd"
+import { Col, Card, Row, Table, Button, Alert } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
-import { Nominee } from '../../types/blockchain';
+import { Nominee, Config, Election } from '../../types/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
 import RegisterNomineeModal from './RegisterNomineeModal';
 
 const { rowStyle, colStyle } = basicStyle;
 
 type Props = {
-	nominees: Nominee[]
+	nominees: Nominee[],
+	config: Config,
+	elections: Election[]
 }
 
-const NomineesTable = ({ nominees }: Props) => {
+const NomineesTable = ({ nominees, elections, config }: Props) => {
+	const { current_election_id } = config
+	const currentElection = elections[current_election_id]
+	const { end_add_candidates_ts } = currentElection
 	const { REG_ARB, UNREG_NOMINEE } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [isAddNomineeModalVisible, setIsAddNomineeModalVisible] = useState(false)
@@ -27,6 +32,16 @@ const NomineesTable = ({ nominees }: Props) => {
 				console.warn(err)
 			}
 		}
+	}
+
+	const isPastAddCandidates = () => {
+		let result = false
+		const end = new Date(end_add_candidates_ts)
+		const now = new Date()
+		if (now > end) {
+			result = true
+		}
+		return result
 	}
 
 	const columns = [{
@@ -59,12 +74,17 @@ const NomineesTable = ({ nominees }: Props) => {
 	}]
 
 	const isUserPresent = nominees.find((nominee: Nominee) => nominee.nominee_name === identity)
-	const isAddButtonVisible = identity && !isUserPresent
+	const isAddButtonVisible = identity && !isUserPresent && !isPastAddCandidates()
 
 	return (
 		<Row style={rowStyle} gutter={24} className='nominees-table-wrap'>
 			<Col md={24} sm={24} xs={24} style={colStyle}>
 				<Card title='Nominees'>
+					{isPastAddCandidates() && (
+						<>
+							<Alert message="Candidacy nomination period for current election has already passed" type="info" showIcon /><br />
+						</>
+					)}
 					{isAddButtonVisible && (
 						<>
 							<Button onClick={() => setIsAddNomineeModalVisible(!isAddNomineeModalVisible)} type="primary">Nominate Self</Button>

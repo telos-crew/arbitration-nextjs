@@ -48,3 +48,16 @@ export type Nominee = {
 	credentials_link: string,
 	application_time: string
 }
+
+export type Config = {
+	admin: string
+	arb_term_length: number,
+	available_funds: string,
+	contract_version: string,
+	current_election_id: number,
+	election_add_candidates_ts: number,
+	election_voting_ts: number,
+	fee_structure: number[],
+	max_elected_arbs: number,
+	runoff_election_voting_ts: number,
+}
