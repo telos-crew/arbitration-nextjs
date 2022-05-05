@@ -53,7 +53,7 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 	}
 
 	return (
-		<Modal title='Register Nominee' visible={isVisible} onCancel={onCancel} footer={null}>
+		<Modal title='Register Nominee' visible={isVisible} onCancel={onCancel} footer={null} className="register-nominee-modal">
 			<Row style={{ ...rowStyle, display: !isVisible ? 'none' : 'flex' }} gutter={24}>
 				<Col md={12} sm={12} xs={24} style={colStyle}>
 					<InputGroup>

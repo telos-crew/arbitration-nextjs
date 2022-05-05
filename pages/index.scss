@@ -29,6 +29,7 @@
 
 	.dropzone {
 		min-height: 300px;
+		min-width: 300px;
 		border: 2px dotted rbga(128, 128, 128, 1);
 		border-radius: 5px;
 		display: flex;
@@ -54,4 +55,8 @@
 	p {
 		text-align: center;
 	}
+}
+
+.register-nominee-modal {
+	min-width: 45% !important;
 }
