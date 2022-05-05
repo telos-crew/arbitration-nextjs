@@ -83,7 +83,9 @@ const uploadFile = async (token: string, file: any, comment: string):Promise<any
 							'x-dstor-comment': comment,
 							...fd.getHeaders()
 					},
-					data: fd
+					maxContentLength: 100000000,
+					maxBodyLength: 100000000,
+					data: fd,
 			});
 
 			return uploadedFileData

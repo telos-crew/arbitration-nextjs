@@ -1,7 +1,8 @@
 import React, {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
+import { Progress } from 'antd'
 
-function Dropzone({ uploadFiles, isUploading, errorMessage }) {
+function Dropzone({ uploadFiles, errorMessage, progress }) {
   const onDrop = useCallback(acceptedFiles => {
     uploadFiles(acceptedFiles)
   }, [])
@@ -14,9 +15,13 @@ function Dropzone({ uploadFiles, isUploading, errorMessage }) {
     >
       <input {...getInputProps()} />
       {
-        isDragActive ?
-          <p>Drop the files here ...</p> :
-          <p>Drag 'n' drop some files here, or click to select files</p>
+        progress > 0 ? (
+          <Progress type="circle" percent={progress} />
+        ) : (
+          isDragActive ?
+            <p>Drop the files here ...</p> :
+            <p>Drag 'n' drop some files here, or click to select files</p>
+        )
       }
     </div>
   )
