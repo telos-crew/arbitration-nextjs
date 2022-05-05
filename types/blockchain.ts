@@ -5,6 +5,7 @@ export type TableRowsConfig = {
 	limit?: string,
 	upper_bound?: string | null,
 	lower_bound?: string | null,
+	reverse?: boolean
 }
 
 export type CaseFile = {

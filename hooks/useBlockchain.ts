@@ -259,6 +259,42 @@ const useBlockchain = () => {
     return data
   }
 
+  const UNREG_NOMINEE = async (nominee: string, callbackRoute?: string): Promise<any> => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'unregnominee',
+        authorization: GET_AUTHORIZATION(),
+        data: {
+          nominee
+        }
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
+      chainId: CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }
+
+  const REG_ARB = async (data: { nominee: string, credentials_link: string}, callbackRoute?: string): Promise<any> => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'regarb',
+        authorization: GET_AUTHORIZATION(),
+        data
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
+      chainId: CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }  
+
 	return {
     GET_AUTHORIZATION,
     CREATE_SIGNING_REQUEST,
@@ -273,7 +309,9 @@ const useBlockchain = () => {
     FETCH_CLAIMS,
     ADD_CLAIM,
     REMOVE_CLAIM,
-    FETCH_ELECTIONS
+    FETCH_ELECTIONS,
+    REG_ARB,
+    UNREG_NOMINEE
 	}
 }
 
