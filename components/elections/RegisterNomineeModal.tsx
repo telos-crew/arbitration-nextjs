@@ -8,7 +8,7 @@ import { validateName, validateIpfsHash } from '../../util/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
-import Dropzone from '../../components/utility/Dropzone'
+import DstorUpload from '../utility/DstorUpload';
 
 const { rowStyle, colStyle } = basicStyle;
 
@@ -58,7 +58,7 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 				<Col md={12} sm={12} xs={24} style={colStyle}>
 					<InputGroup>
 						<Input
-							defaultValue={input.claimant}
+							defaultValue={identity}
 							onChange={(e) => handleTextChange(e, 'nominee')}
 							addonBefore='Nominee'
 							placeholder="myaccount111"
@@ -66,7 +66,7 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 					</InputGroup>
 					<InputGroup>
 						<Input
-							onChange={(e) => handleTextChange(e, 'claim_link')}
+							onChange={(e) => handleTextChange(e, 'credentials_link')}
 							addonBefore='IPFS Hash'
 							placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
 						/>
@@ -81,7 +81,7 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 				</Col>
 				<Col md={12} sm={12} xs={24} style={colStyle}>
 					<div className='file-upload-area'>
-						<Dropzone />
+						<DstorUpload />
 					</div>
 				</Col>
 			</Row>
