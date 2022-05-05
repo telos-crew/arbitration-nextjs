@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
 
-function Dropzone({ uploadFiles }) {
+function Dropzone({ uploadFiles, isUploading, errorMessage }) {
   const onDrop = useCallback(acceptedFiles => {
     uploadFiles(acceptedFiles)
   }, [])

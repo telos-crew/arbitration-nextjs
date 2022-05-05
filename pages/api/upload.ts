@@ -34,7 +34,6 @@ apiRoute.post(async (req, res) => {
 // Assuming that 'path/file.txt' is a regular file.
 	fs.unlink(path, (err) => {
 		if (err) throw err;
-		console.log(path  + 'was deleted');
 		res.status(200).json(response);
 	})
 });
@@ -62,8 +61,6 @@ const getAccessTokenWithApiKey = async (): Promise<string | undefined> => {
 
 			if(!access_token) throw new Error("Error getting token");
 
-			console.log('access_token from API key: ', access_token);
-
 			return access_token;
 	} catch (error) {
 			console.log('login error: ', error);
@@ -74,11 +71,8 @@ const getAccessTokenWithApiKey = async (): Promise<string | undefined> => {
 const uploadFile = async (token: string, file: any, comment: string):Promise<any> => {
 	try {
 			if(!DSTOR_UPLOAD_ENDPOINT) throw new Error("add file endpoint not found.");
-			console.log(1)
 			const fd = new FormData();
-			console.log('uploadFile file: ', file)
 			fd.append('', file);
-			console.log(2)
 			const { data: uploadedFileData } = await axios(DSTOR_UPLOAD_ENDPOINT, {
 					method: 'POST',
 					headers: {

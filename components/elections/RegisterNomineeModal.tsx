@@ -30,7 +30,8 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [input, setInput] = useState({
 		...INITIAL_INPUT,
-		claimant: identity
+		claimant: identity,
+		hash: ''
 	})
 	const [errorMessage, setErrorMessage] = useState('')
 
@@ -39,6 +40,13 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 		setInput({
 			...input,
 			[field]: e.target.value
+		})
+	}
+
+	const setHash = (hash: string) => {
+		setInput({
+			...input,
+			hash
 		})
 	}
 
@@ -66,9 +74,10 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 					</InputGroup>
 					<InputGroup>
 						<Input
-							onChange={(e) => handleTextChange(e, 'credentials_link')}
+							onChange={(e) => handleTextChange(e, 'hash')}
 							addonBefore='IPFS Hash'
 							placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
+							value={input.hash}
 						/>
 					</InputGroup>
 					<br />
@@ -81,7 +90,7 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 				</Col>
 				<Col md={12} sm={12} xs={24} style={colStyle}>
 					<div className='file-upload-area'>
-						<DstorUpload />
+						<DstorUpload setHash={setHash} />
 					</div>
 				</Col>
 			</Row>
