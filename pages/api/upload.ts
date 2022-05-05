@@ -27,7 +27,6 @@ const apiRoute = nextConnect({
 apiRoute.use(upload.single('file'));
 
 apiRoute.post(async (req, res) => {
-	console.log('apiRoute.post, req.file: ', req.file);
 	const { path } = req.file
 	const readStream = fs.createReadStream(path)
 	const token = await getAccessTokenWithApiKey()
@@ -36,7 +35,6 @@ apiRoute.post(async (req, res) => {
 	fs.unlink(path, (err) => {
 		if (err) throw err;
 		console.log(path  + 'was deleted');
-		console.log('uploadFile response: ', response)
 		res.status(200).json(response);
 	})
 });
@@ -93,8 +91,6 @@ const uploadFile = async (token: string, file: any, comment: string):Promise<any
 					},
 					data: fd
 			});
-
-			console.log('uploadedFileData: ', uploadedFileData);
 
 			return uploadedFileData
 	} catch (err) {
