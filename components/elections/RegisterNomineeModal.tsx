@@ -4,12 +4,11 @@ import basicStyle from "@iso/assets/styles/constants"
 import Input, {
   InputGroup,
 } from '@iso/components/uielements/input';
-import Box from '@iso/components/utility/box';
-import ContentHolder from '@iso/components/utility/contentHolder';
 import { validateName, validateIpfsHash } from '../../util/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
+import Dropzone from '../../components/utility/Dropzone'
 
 const { rowStyle, colStyle } = basicStyle;
 
@@ -56,24 +55,22 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 	return (
 		<Modal title='Register Nominee' visible={isVisible} onCancel={onCancel} footer={null}>
 			<Row style={{ ...rowStyle, display: !isVisible ? 'none' : 'flex' }} gutter={24}>
-				<Col md={24} sm={24} xs={24} style={colStyle}>
-					<ContentHolder>
-						<InputGroup>
-							<Input
-								defaultValue={input.claimant}
-								onChange={(e) => handleTextChange(e, 'nominee')}
-								addonBefore='Nominee'
-								placeholder="myaccount111"
-							/>
-						</InputGroup>
-						<InputGroup>
-							<Input
-								onChange={(e) => handleTextChange(e, 'claim_link')}
-								addonBefore='IPFS Hash'
-								placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
-							/>
-						</InputGroup>
-					</ContentHolder>
+				<Col md={12} sm={12} xs={24} style={colStyle}>
+					<InputGroup>
+						<Input
+							defaultValue={input.claimant}
+							onChange={(e) => handleTextChange(e, 'nominee')}
+							addonBefore='Nominee'
+							placeholder="myaccount111"
+						/>
+					</InputGroup>
+					<InputGroup>
+						<Input
+							onChange={(e) => handleTextChange(e, 'claim_link')}
+							addonBefore='IPFS Hash'
+							placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
+						/>
+					</InputGroup>
 					<br />
 					<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
 					<Button onClick={onCancel}>Cancel</Button>
@@ -81,6 +78,11 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 					{errorMessage && (
 						<Alert message={errorMessage} type="error" />
 					)}
+				</Col>
+				<Col md={12} sm={12} xs={24} style={colStyle}>
+					<div className='file-upload-area'>
+						<Dropzone />
+					</div>
 				</Col>
 			</Row>
 		</Modal>

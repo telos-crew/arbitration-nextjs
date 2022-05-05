@@ -21,7 +21,7 @@ const NomineesTable = ({ nominees, elections, config }: Props) => {
 	const { end_add_candidates_ts } = currentElection
 	const { REG_ARB, UNREG_NOMINEE } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const [isAddNomineeModalVisible, setIsAddNomineeModalVisible] = useState(false)
+	const [isAddNomineeModalVisible, setIsAddNomineeModalVisible] = useState(true)
 
 	const onClickRemoveNominee = async (account_name: string) => {
 		if (confirm(`Are you sure that you would like to remove ${account_name} from the list of nominees?`)) {
