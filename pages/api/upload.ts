@@ -2,6 +2,7 @@ import nextConnect from 'next-connect'
 import multer from 'multer'
 import axios from 'axios'
 import FormData from 'form-data'
+import fs from 'fs'
 
 const DSTOR_API_KEY = process.env.DSTOR_API_KEY
 const DSTOR_UPLOAD_ENDPOINT = process.env.DSTOR_UPLOAD_ENDPOINT
@@ -27,9 +28,17 @@ apiRoute.use(upload.single('file'));
 
 apiRoute.post(async (req, res) => {
 	console.log('apiRoute.post, req.file: ', req.file);
+	const { path } = req.file
+	const readStream = fs.createReadStream(path)
 	const token = await getAccessTokenWithApiKey()
-	const data = uploadFile(token, req.file, 'Uploaded via Telos Arbitration')
-  res.status(200).json(data);
+	const response = await uploadFile(token, readStream, 'Uploaded via Telos Arbitration')
+// Assuming that 'path/file.txt' is a regular file.
+	fs.unlink(path, (err) => {
+		if (err) throw err;
+		console.log(path  + 'was deleted');
+		console.log('uploadFile response: ', response)
+		res.status(200).json(response);
+	})
 });
 
 export default apiRoute;
@@ -43,7 +52,6 @@ export const config = {
 const getAccessTokenWithApiKey = async (): Promise<string | undefined> => {
 	try {
 			if(!DSTOR_API_KEY) throw new Error("api key not found.");
-			
 			if(!DSTOR_TOKEN_ENDPOINT) throw new Error("token endpoint not found.");
 
 			const { data: { access_token } } = await axios(DSTOR_TOKEN_ENDPOINT, {

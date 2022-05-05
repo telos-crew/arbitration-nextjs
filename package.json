@@ -37,6 +37,7 @@
 		"firebase": "^7.20.0",
 		"form-data": "^4.0.0",
 		"frappe-charts": "^1.5.2",
+		"fs": "^0.0.1-security",
 		"google-maps-react": "^2.0.6",
 		"isomorphic-unfetch": "^3.0.0",
 		"js-cookie": "^2.2.1",
