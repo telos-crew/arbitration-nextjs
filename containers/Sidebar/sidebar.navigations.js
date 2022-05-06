@@ -1,9 +1,14 @@
 export default [
 	{
-		key: 'home',
+		key: '',
 		path: '/',
 		label: 'sidebar.home',
 		leftIcon: null,
+		withoutDashboard: true,
+	}, {
+		key: 'elections',
+		path: '/elections',
+		label: 'sidebar.elections',
 		withoutDashboard: true,
 	}
 	// {

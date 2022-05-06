@@ -20,9 +20,6 @@ type Props = {
 }
 
 function Elections({ elections, nominees, config }: Props) {
-  console.log('nominees: ', nominees)
-  const { identity } = useSelector((state: RootState) => state.auth)
-
   return (
     <>
       <Head>
@@ -30,12 +27,16 @@ function Elections({ elections, nominees, config }: Props) {
       </Head>
       <DashboardLayout>
         <LayoutWrapper>
-          <Row style={rowStyle} gutter={24}>
+          <Row style={rowStyle} gutter={24} className='nominees-table-wrap'>
 			      <Col md={12} sm={12} xs={24} style={colStyle}>
               <NomineesTable nominees={nominees} elections={elections} config={config} />
             </Col>
           </Row>
-          <ElectionsTable elections={elections} />
+          <Row style={rowStyle} gutter={24}>
+			      <Col md={24} sm={24} xs={24} style={colStyle}>
+                <ElectionsTable elections={elections} />
+            </Col>          
+          </Row>
         </LayoutWrapper>
       </DashboardLayout>
     </>

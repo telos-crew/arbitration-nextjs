@@ -38,7 +38,6 @@ const Home = ({ config }) => {
 
 export async function getServerSideProps() {
   const config = await FETCH_CONFIG()
-  console.log('config: ', config)
 	return {
 		props: {
       config

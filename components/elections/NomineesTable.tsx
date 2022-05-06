@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Card, Row, Table, Button, Alert } from "antd"
-import basicStyle from "@iso/assets/styles/constants"
+import { Card, Table, Button, Alert } from "antd"
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
 import { Nominee, Config, Election } from '../../types/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
 import RegisterNomineeModal from './RegisterNomineeModal';
-
-const { rowStyle, colStyle } = basicStyle;
 
 type Props = {
 	nominees: Nominee[],
@@ -21,7 +18,7 @@ const NomineesTable = ({ nominees, elections, config }: Props) => {
 	const { end_add_candidates_ts } = currentElection
 	const { REG_ARB, UNREG_NOMINEE } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const [isAddNomineeModalVisible, setIsAddNomineeModalVisible] = useState(true)
+	const [isAddNomineeModalVisible, setIsAddNomineeModalVisible] = useState(false)
 
 	const onClickRemoveNominee = async (account_name: string) => {
 		if (confirm(`Are you sure that you would like to remove ${account_name} from the list of nominees?`)) {
@@ -45,7 +42,7 @@ const NomineesTable = ({ nominees, elections, config }: Props) => {
 	}
 
 	const columns = [{
-		title: 'Name',
+		title: 'Nominee',
 		dataIndex: 'nominee_name',
 		key: 'nominee_name'
 	},{
@@ -77,28 +74,24 @@ const NomineesTable = ({ nominees, elections, config }: Props) => {
 	const isAddButtonVisible = identity && !isUserPresent && !isPastAddCandidates()
 
 	return (
-		<Row style={rowStyle} gutter={24} className='nominees-table-wrap'>
-			<Col md={24} sm={24} xs={24} style={colStyle}>
-				<Card title='Nominees'>
-					{isPastAddCandidates() && (
-						<>
-							<Alert
-								message="Candidacy nomination period for current election has already passed"
-								type="info"
-								showIcon
-							/>
-							<br />
-						</>
-					)}
-					{isAddButtonVisible && (
-						<>
-							<Button onClick={() => setIsAddNomineeModalVisible(!isAddNomineeModalVisible)} type="primary">Nominate Self</Button>
-							<br /><br />
-						</>
-					)}
-					<Table columns={columns} dataSource={nominees} key={'nominee_name'} className='nominees-table' />
-				</Card>
-			</Col>
+		<Card title='Nominees'>
+			{isPastAddCandidates() && (
+				<>
+					<Alert
+						message="Candidacy nomination period for current election has already passed"
+						type="info"
+						showIcon
+					/>
+					<br />
+				</>
+			)}
+			{isAddButtonVisible && (
+				<>
+					<Button onClick={() => setIsAddNomineeModalVisible(!isAddNomineeModalVisible)} type="primary">Nominate Self</Button>
+					<br /><br />
+				</>
+			)}
+			<Table columns={columns} dataSource={nominees} key={'nominee_name'} className='nominees-table' />
 			{isAddNomineeModalVisible && (
 				<RegisterNomineeModal
 					isVisible={isAddNomineeModalVisible}
@@ -106,7 +99,7 @@ const NomineesTable = ({ nominees, elections, config }: Props) => {
 					onCancel={() => console.log('onCancel')}
 				/>
 			)}
-		</Row>
+		</Card>
 	)
 }
 

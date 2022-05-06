@@ -55,3 +55,5 @@ export const secondsToDDHHMMSS = (inputVar: string | number): string => {
   if (seconds < 10) seconds = `0${seconds}`
   return `${days}:${hours}:${minutes}:${seconds}`
 }
+
+export const ZERO_TIME = '1970-01-01T00:00:00'

@@ -4,10 +4,10 @@ import { Election, Nominee } from '../types/blockchain';
 const ARBITRATION_CONTRACT = process.env.ARBITRATION_CONTRACT
 
 export const ELECTION_STATUS = [
-	'Open',
-	'Passed',
-	'Failed',
-	'Closed'
+	'',
+	'Created',
+	'Live',
+	'Ended'
 ]
 
 export const FETCH_ELECTIONS = async (): Promise<Election[]> => {
@@ -29,3 +29,5 @@ export const FETCH_NOMINEES = async (): Promise<Nominee[]> => {
 	})
 	return rows
 }
+
+export const STRING_TO_LOCALE_TIME = (string: string): Date => new Date(string).toLocaleString()
