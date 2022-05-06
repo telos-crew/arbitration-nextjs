@@ -30,8 +30,8 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [input, setInput] = useState({
 		...INITIAL_INPUT,
-		claimant: identity,
-		hash: ''
+		nominee: identity,
+		credentials_link: ''
 	})
 	const [errorMessage, setErrorMessage] = useState('')
 
@@ -43,10 +43,10 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 		})
 	}
 
-	const setHash = (hash: string) => {
+	const setHash = (credentials_link: string) => {
 		setInput({
 			...input,
-			hash
+			credentials_link
 		})
 	}
 
@@ -74,14 +74,14 @@ const RegisterNomineeModal = ({ onCancel, isVisible, toggle }: Props) => {
 					</InputGroup>
 					<InputGroup>
 						<Input
-							onChange={(e) => handleTextChange(e, 'hash')}
+							onChange={(e) => handleTextChange(e, 'credentials_link')}
 							addonBefore='IPFS Hash'
 							placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
-							value={input.hash}
+							value={input.credentials_link}
 						/>
 					</InputGroup>
 					<br />
-					<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
+					<Button onClick={() => submit('add')} type="primary">Register</Button>&nbsp;&nbsp;
 					<Button onClick={onCancel}>Cancel</Button>
 					<br /><br />
 					{errorMessage && (

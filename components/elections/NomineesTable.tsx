@@ -82,7 +82,12 @@ const NomineesTable = ({ nominees, elections, config }: Props) => {
 				<Card title='Nominees'>
 					{isPastAddCandidates() && (
 						<>
-							<Alert message="Candidacy nomination period for current election has already passed" type="info" showIcon /><br />
+							<Alert
+								message="Candidacy nomination period for current election has already passed"
+								type="info"
+								showIcon
+							/>
+							<br />
 						</>
 					)}
 					{isAddButtonVisible && (

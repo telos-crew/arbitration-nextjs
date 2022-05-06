@@ -7,7 +7,6 @@ type Props = {
 }
 
 const DstorUpload = ({ setHash }: Props) => {
-	const [isUploading, setIsUploading] = useState(false)
 	const [errorMessage, setErrorMessage] = useState('')
 	const [progress, setProgress] = useState(0)
 
@@ -20,7 +19,7 @@ const DstorUpload = ({ setHash }: Props) => {
 			const { data: { Hash } } = await axios.post(`/api/upload`, formData, {
 				headers: { 'content-type': 'multipart/form-data' },
 				onUploadProgress: (event) => {
-					const portion = (Math.round((event.loaded * 100) * 0.9 / event.total))
+					const portion = (Math.round((event.loaded * 100) * 0.7 / event.total))
 					console.log(`Current progress:`, portion);
 					setProgress(portion)
 				},
@@ -33,8 +32,6 @@ const DstorUpload = ({ setHash }: Props) => {
 		} catch (err) {
 			console.warn(err)
 			setErrorMessage(err.message)
-		} finally {
-			setIsUploading(false)
 		}
 	}
 
