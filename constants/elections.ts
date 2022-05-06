@@ -1,7 +1,7 @@
 import { GET_TABLE_ROWS } from "./blockchain"
 import { Election, Nominee } from '../types/blockchain';
 
-const ARBITRATION_CONTRACT = process.env.ARBITRATION_CONTRACT
+const NEXT_PUBLIC_ARBITRATION_CONTRACT = process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT
 
 export const ELECTION_STATUS = [
 	'',
@@ -12,8 +12,8 @@ export const ELECTION_STATUS = [
 
 export const FETCH_ELECTIONS = async (): Promise<Election[]> => {
 	const { rows } = await GET_TABLE_ROWS({
-		code: ARBITRATION_CONTRACT,
-		scope: ARBITRATION_CONTRACT,
+		code: NEXT_PUBLIC_ARBITRATION_CONTRACT,
+		scope: NEXT_PUBLIC_ARBITRATION_CONTRACT,
 		table: 'elections',
 		reverse: true
 	})
@@ -22,8 +22,8 @@ export const FETCH_ELECTIONS = async (): Promise<Election[]> => {
 
 export const FETCH_NOMINEES = async (): Promise<Nominee[]> => {
 	const { rows } = await GET_TABLE_ROWS({
-		code: ARBITRATION_CONTRACT,
-		scope: ARBITRATION_CONTRACT,
+		code: NEXT_PUBLIC_ARBITRATION_CONTRACT,
+		scope: NEXT_PUBLIC_ARBITRATION_CONTRACT,
 		table: 'nominees',
 		reverse: true
 	})

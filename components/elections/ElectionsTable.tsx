@@ -56,7 +56,7 @@ const ElectionsTable = ({ elections }: Props) => {
 		key: 'status',
 		render: (text) => <span>{ELECTION_STATUS[text]}</span>
 	},]
-
+	console.log('process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT: ', process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT)
 	console.log('elections: ', elections)
 
 	return (

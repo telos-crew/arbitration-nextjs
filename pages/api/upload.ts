@@ -4,9 +4,9 @@ import axios from 'axios'
 import FormData from 'form-data'
 import fs from 'fs'
 
-const DSTOR_API_KEY = process.env.DSTOR_API_KEY
-const DSTOR_UPLOAD_ENDPOINT = process.env.DSTOR_UPLOAD_ENDPOINT
-const DSTOR_TOKEN_ENDPOINT = process.env.DSTOR_TOKEN_ENDPOINT
+const NEXT_PUBLIC_DSTOR_API_KEY = process.env.NEXT_PUBLIC_DSTOR_API_KEY
+const NEXT_PUBLIC_DSTOR_UPLOAD_ENDPOINT = process.env.NEXT_PUBLIC_DSTOR_UPLOAD_ENDPOINT
+const NEXT_PUBLIC_DSTOR_TOKEN_ENDPOINT = process.env.NEXT_PUBLIC_DSTOR_TOKEN_ENDPOINT
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -48,14 +48,14 @@ export const config = {
 
 const getAccessTokenWithApiKey = async (): Promise<string | undefined> => {
 	try {
-			if(!DSTOR_API_KEY) throw new Error("api key not found.");
-			if(!DSTOR_TOKEN_ENDPOINT) throw new Error("token endpoint not found.");
+			if(!NEXT_PUBLIC_DSTOR_API_KEY) throw new Error("api key not found.");
+			if(!NEXT_PUBLIC_DSTOR_TOKEN_ENDPOINT) throw new Error("token endpoint not found.");
 
-			const { data: { access_token } } = await axios(DSTOR_TOKEN_ENDPOINT, {
+			const { data: { access_token } } = await axios(NEXT_PUBLIC_DSTOR_TOKEN_ENDPOINT, {
 					method: 'get',
 					headers: {
 							'Content-Type': 'application/json',
-							'api-key': DSTOR_API_KEY // insert 64-character developer API key obtained from 'Account' tab of UI dashboard
+							'api-key': NEXT_PUBLIC_DSTOR_API_KEY // insert 64-character developer API key obtained from 'Account' tab of UI dashboard
 					}
 			});
 
@@ -70,10 +70,10 @@ const getAccessTokenWithApiKey = async (): Promise<string | undefined> => {
 
 const uploadFile = async (token: string, file: any, comment: string):Promise<any> => {
 	try {
-			if(!DSTOR_UPLOAD_ENDPOINT) throw new Error("add file endpoint not found.");
+			if(!NEXT_PUBLIC_DSTOR_UPLOAD_ENDPOINT) throw new Error("add file endpoint not found.");
 			const fd = new FormData();
 			fd.append('', file);
-			const { data: uploadedFileData } = await axios(DSTOR_UPLOAD_ENDPOINT, {
+			const { data: uploadedFileData } = await axios(NEXT_PUBLIC_DSTOR_UPLOAD_ENDPOINT, {
 					method: 'POST',
 					headers: {
 							Authorization: `Bearer ${token}`,

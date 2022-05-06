@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { TableRowsConfig, Config } from '../types/blockchain';
 
-const ARBITRATION_CONTRACT = process.env.ARBITRATION_CONTRACT
-const TELOS_API_ENDPOINT = process.env.TELOS_API_ENDPOINT
+const NEXT_PUBLIC_ARBITRATION_CONTRACT = process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT
+const NEXT_PUBLIC_TELOS_API_ENDPOINT = process.env.NEXT_PUBLIC_TELOS_API_ENDPOINT
 const TABLE_ROWS_ENDPOINT = 'v1/chain/get_table_rows'
 
 export const GET_AUTHORIZATION = () => [
@@ -14,7 +14,7 @@ export const GET_AUTHORIZATION = () => [
 
 export const GET_TABLE_ROWS = async (config: TableRowsConfig): Promise<{rows: any[]}> => {
 	const { data } = await axios({
-		url: `${TELOS_API_ENDPOINT}/${TABLE_ROWS_ENDPOINT}`,
+		url: `${NEXT_PUBLIC_TELOS_API_ENDPOINT}/${TABLE_ROWS_ENDPOINT}`,
 		method: 'post',
 		headers: {
 			'content-type': 'application/json'
@@ -35,8 +35,8 @@ export const GET_TABLE_ROWS = async (config: TableRowsConfig): Promise<{rows: an
 
 export const FETCH_CONFIG = async (): Promise<Config[]> => {
 	const { rows: [config] } = await GET_TABLE_ROWS({
-		code: ARBITRATION_CONTRACT,
-		scope: ARBITRATION_CONTRACT,
+		code: NEXT_PUBLIC_ARBITRATION_CONTRACT,
+		scope: NEXT_PUBLIC_ARBITRATION_CONTRACT,
 		table: 'config',
 		reverse: true
 	})

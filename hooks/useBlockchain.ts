@@ -22,18 +22,18 @@ export const TESTNET_ENDPOINTS = [
 
 const CONFIG = {
   testnet: {
-    TELOS_API_ENDPOINTS: TESTNET_ENDPOINTS,
-    CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f',
-    BLOCK_EXPLORER_ENDPOINT: 'https://telos-test.bloks.io',
+    NEXT_PUBLIC_TELOS_API_ENDPOINTS: TESTNET_ENDPOINTS,
+    NEXT_PUBLIC_CHAIN_ID: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f',
+    NEXT_PUBLIC_BLOCK_EXPLORER_ENDPOINT: 'https://telos-test.bloks.io',
     ARBITRACTION_CONTRACT: 'testtelosarb',
-    APP_HOSTNAME: 'http://localhost:3003'
+    NEXT_PUBLIC_APP_HOSTNAME: 'http://localhost:3003'
   },
   mainnet: {
-    TELOS_API_ENDPOINTS: MAINNET_ENDPOINTS,
-    CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11',
-    BLOCK_EXPLORER_ENDPOINT: 'https://telos.bloks.io',
+    NEXT_PUBLIC_TELOS_API_ENDPOINTS: MAINNET_ENDPOINTS,
+    NEXT_PUBLIC_CHAIN_ID: '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11',
+    NEXT_PUBLIC_BLOCK_EXPLORER_ENDPOINT: 'https://telos.bloks.io',
     ARBITRACTION_CONTRACT: 'testtelosarb',
-    APP_HOSTNAME: 'http://localhost:3003'
+    NEXT_PUBLIC_APP_HOSTNAME: 'http://localhost:3003'
   }
 }
 
@@ -41,7 +41,7 @@ const CONFIG = {
 const useBlockchain = () => {
   const { identity, chain } = useSelector((state: RootState) => state.auth)
   const chainConfig = CONFIG[chain]
-  const { TELOS_API_ENDPOINTS, BLOCK_EXPLORER_ENDPOINT, CHAIN_ID } = chainConfig
+  const { NEXT_PUBLIC_TELOS_API_ENDPOINTS, NEXT_PUBLIC_BLOCK_EXPLORER_ENDPOINT, NEXT_PUBLIC_CHAIN_ID } = chainConfig
 
   const GET_AUTHORIZATION = () => [
     {
@@ -50,12 +50,12 @@ const useBlockchain = () => {
     }
   ]
 
-  const GET_TRX_WEB_LINK = (trx_id: string) => `${BLOCK_EXPLORER_ENDPOINT}/transaction/${trx_id}`
+  const GET_TRX_WEB_LINK = (trx_id: string) => `${NEXT_PUBLIC_BLOCK_EXPLORER_ENDPOINT}/transaction/${trx_id}`
 
   const CREATE_IDENTITY_REQUEST = (): string => {
     const config = {
-      callback: `${CONFIG[chain].APP_HOSTNAME}?id={{sa}}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}?id={{sa}}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       account: '',
       expire_seconds: 600,
       name: 'identity',
@@ -72,7 +72,7 @@ const useBlockchain = () => {
         }
       }
     }
-    const req1 = SigningRequest.identity(config, getEsrOptions(TELOS_API_ENDPOINTS[0]))
+    const req1 = SigningRequest.identity(config, getEsrOptions(NEXT_PUBLIC_TELOS_API_ENDPOINTS[0]))
     const encoded = req1.encode()
     return encoded
   }
@@ -80,13 +80,13 @@ const useBlockchain = () => {
   const CREATE_SIGNING_REQUEST = async (data: SigningRequestData): Promise<string> => {
     const dataWithChainId = {
       ...data,
-      chainId: CHAIN_ID
+      chainId: NEXT_PUBLIC_CHAIN_ID
     }
     console.log('identity: ', identity)
     console.log('dataWithChainId: ', dataWithChainId)
     console.log('data: ', data)
     console.log(JSON.stringify(dataWithChainId))
-    const req1 = await SigningRequest.create(dataWithChainId, getEsrOptions(TELOS_API_ENDPOINTS[0]))
+    const req1 = await SigningRequest.create(dataWithChainId, getEsrOptions(NEXT_PUBLIC_TELOS_API_ENDPOINTS[0]))
     const encoded = req1.encode()
     return encoded
   }
@@ -106,7 +106,7 @@ const useBlockchain = () => {
 
 	const GET_TABLE_ROWS = async (config: TableRowsConfig): Promise<{rows: any[]}> => {
 		const { data } = await axios({
-			url: `${TELOS_API_ENDPOINTS[0]}/${TABLE_ROWS_ENDPOINT}`,
+			url: `${NEXT_PUBLIC_TELOS_API_ENDPOINTS[0]}/${TABLE_ROWS_ENDPOINT}`,
 			method: 'post',
 			headers: {
 				'content-type': 'application/json'
@@ -153,8 +153,8 @@ const useBlockchain = () => {
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       actions
     })
     return signingRequest
@@ -170,8 +170,8 @@ const useBlockchain = () => {
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       actions
     })
     return signingRequest
@@ -187,8 +187,8 @@ const useBlockchain = () => {
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       actions
     })
     return signingRequest
@@ -219,8 +219,8 @@ const useBlockchain = () => {
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       actions
     })
     return signingRequest
@@ -242,8 +242,8 @@ const useBlockchain = () => {
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       actions
     })
     return signingRequest
@@ -271,8 +271,8 @@ const useBlockchain = () => {
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       actions
     })
     return signingRequest
@@ -288,8 +288,8 @@ const useBlockchain = () => {
       }
     ]
     const signingRequest = await CREATE_SIGNING_REQUEST({
-      callback: `${CONFIG[chain].APP_HOSTNAME}/${callbackRoute}`,
-      chainId: CHAIN_ID,
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
       actions
     })
     return signingRequest
