@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Card, Row, Table, Button } from "antd"
+import { Card, Table, Button } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
@@ -135,25 +135,21 @@ const CaseFilesTable = () => {
 	console.log('caseFiles: ', caseFiles)
 
 	return (
-		<Row style={rowStyle} gutter={24}>
-			<Col md={24} sm={24} xs={24} style={colStyle}>
-				<Card variant="outlined">
-					{!!identity && (
-						<>
-							<Button onClick={() => setIsFilecaseModalVisible(!isFileCaseModalVisible)} type="primary">File New Case</Button>
-							<br /><br />
-						</>
-					)}
-					<Table columns={columns} dataSource={caseFiles} key={'case_id'} />
-				</Card>
-			</Col>
+		<Card title='Case Files'>
+			{!!identity && (
+				<>
+					<Button onClick={() => setIsFilecaseModalVisible(!isFileCaseModalVisible)} type="primary">File New Case</Button>
+					<br /><br />
+				</>
+			)}
+			<Table columns={columns} dataSource={caseFiles} key={'case_id'} />
 			{!!identity && (
 				<FileCaseModal isVisible={isFileCaseModalVisible} toggle={() => setIsFilecaseModalVisible(!isFileCaseModalVisible)} />
 			)}
 			{isClaimsModalVisible && (
 				<ClaimsModal isVisible={isClaimsModalVisible} toggle={() => setIsClaimsModalVisible(!isClaimsModalVisible)} case_id={activeCaseId} />
 			)}
-		</Row>
+		</Card>
 	)
 }
 
