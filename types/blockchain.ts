@@ -5,6 +5,7 @@ export type TableRowsConfig = {
 	limit?: string,
 	upper_bound?: string | null,
 	lower_bound?: string | null,
+	reverse?: boolean
 }
 
 export type CaseFile = {
@@ -27,4 +28,36 @@ export type Claim = {
 	response_link: string,
 	status: number,
 	decision_class: number
+}
+
+export type Election = {
+	election_id: 3,
+	ballot_name: string,
+	info_url: string,
+	candidates: { name: string, value: string}[],
+	available_seats: number,
+	begin_add_candidates_ts: string,
+	end_add_candidates_ts: string,
+	begin_voting_ts: string,
+	end_voting_ts: string,
+	status: number
+}
+
+export type Nominee = {
+	nominee_name: string,
+	credentials_link: string,
+	application_time: string
+}
+
+export type Config = {
+	admin: string
+	arb_term_length: number,
+	available_funds: string,
+	contract_version: string,
+	current_election_id: number,
+	election_add_candidates_ts: number,
+	election_voting_ts: number,
+	fee_structure: number[],
+	max_elected_arbs: number,
+	runoff_election_voting_ts: number,
 }
