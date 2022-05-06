@@ -6,7 +6,7 @@ import DashboardLayout from '../../containers/DashboardLayout/DashboardLayout'
 import { FETCH_ARBITRATORS } from '../../constants';
 import { Election, Nominee, Config, Arbitrator } from '../../types';
 import basicStyle from "@iso/assets/styles/constants"
-import ArbitratorsTable from '../../components/elections/ArbitratorsTable';
+import ArbitratorsTable from '../../components/arbitrators/ArbitratorsTable';
 
 const { rowStyle, colStyle } = basicStyle
 
