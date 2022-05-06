@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { Col, Card, Row, Table, Button } from "antd"
+import React, { useEffect, useState } from 'react'
+import { Col, Card, Row, Table } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
-import { useSelector } from 'react-redux';
-import { RootState } from '../../types';
-import { ELECTION_STATUS, STRING_TO_LOCALE_TIME } from '../../constants/elections';
+import { ELECTION_STATUS, FETCH_ELECTIONS, STRING_TO_LOCALE_TIME } from '../../constants/elections';
 import { Election } from '../../types/blockchain';
 import { ZERO_TIME } from '../../util';
 
@@ -13,8 +11,25 @@ type Props = {
 	elections: Election[]
 }
 
-const ElectionsTable = ({ elections }: Props) => {
-	const { identity } = useSelector((state: RootState) => state.auth)
+const ElectionsTable = ({ elections: initialElections }: Props) => {
+	const [elections, setElections] = useState(initialElections)
+
+	const fetchElections = async () => {
+		try {
+			const electionsData = await FETCH_ELECTIONS()
+			setElections(electionsData)
+		} catch (error) {
+			console.warn(error)
+		}
+	}
+
+	useEffect(() => {
+		const electionsInterval = setInterval(fetchElections, 10000)
+
+		return () => {
+			clearInterval(electionsInterval)
+		}
+	}, [])
 
 	const columns = [{
 		title: 'ID',
@@ -53,10 +68,9 @@ const ElectionsTable = ({ elections }: Props) => {
 	},{
 		title: 'Status',
 		dataIndex: 'status',
-		key: 'status',
 		render: (text) => <span>{ELECTION_STATUS[text]}</span>
 	},]
-	console.log('process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT: ', process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT)
+
 	console.log('elections: ', elections)
 
 	return (

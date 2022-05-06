@@ -3,8 +3,6 @@ import Head from 'next/head';
 import LayoutWrapper from '@iso/components/utility/layoutWrapper'
 import { Row, Col } from 'antd'
 import DashboardLayout from '../../containers/DashboardLayout/DashboardLayout'
-import { useSelector } from 'react-redux';
-import { RootState } from '../../types'
 import ElectionsTable from '../../components/elections/ElectionsTable';
 import { FETCH_ELECTIONS, FETCH_NOMINEES, FETCH_CONFIG } from '../../constants';
 import { Election, Nominee, Config } from '../../types';
@@ -34,7 +32,7 @@ function Elections({ elections, nominees, config }: Props) {
           </Row>
           <Row style={rowStyle} gutter={24}>
 			      <Col md={24} sm={24} xs={24} style={colStyle}>
-                <ElectionsTable elections={elections} />
+              <ElectionsTable elections={elections} />
             </Col>          
           </Row>
         </LayoutWrapper>
@@ -48,7 +46,7 @@ export async function getServerSideProps() {
   const nomineesPromise = FETCH_NOMINEES()
   const configPromise = FETCH_CONFIG()
   const [elections, nominees, config] = await Promise.all([electionsPromise, nomineesPromise, configPromise])
-
+  console.log('on server elections is: ', elections)
 	return {
 		props: {
 			elections,
