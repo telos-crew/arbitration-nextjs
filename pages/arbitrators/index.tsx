@@ -17,7 +17,7 @@ type Props = {
   config: Config
 }
 
-function Elections({ elections, nominees, config, arbitrators }: Props) {
+function Elections({ arbitrators }: Props) {
   return (
     <>
       <Head>

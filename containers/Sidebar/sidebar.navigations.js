@@ -6,6 +6,11 @@ export default [
 		leftIcon: null,
 		withoutDashboard: true,
 	}, {
+		key: 'arbitrators',
+		path: '/arbitrators',
+		label: 'sidebar.arbitrators',
+		withoutDashboard: true,
+	}, {
 		key: 'elections',
 		path: '/elections',
 		label: 'sidebar.elections',
