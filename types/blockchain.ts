@@ -61,3 +61,14 @@ export type Config = {
 	max_elected_arbs: number,
 	runoff_election_voting_ts: number,
 }
+
+export type Arbitrator = {
+	arb: string,
+	arb_status: number,
+	open_case_ids: number[],
+	closed_case_ids: number[],
+	credentials_link: string,
+	elected_time: string,
+	term_expiration: string,
+	languages: number[]
+}

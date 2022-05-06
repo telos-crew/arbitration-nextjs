@@ -71,8 +71,6 @@ const ElectionsTable = ({ elections: initialElections }: Props) => {
 		render: (text) => <span>{ELECTION_STATUS[text]}</span>
 	},]
 
-	console.log('elections: ', elections)
-
 	return (
 		<Row style={rowStyle} gutter={24}>
 			<Col md={24} sm={24} xs={24} style={colStyle}>

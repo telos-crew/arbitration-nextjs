@@ -1,5 +1,5 @@
 import { GET_TABLE_ROWS } from "./blockchain"
-import { Election, Nominee } from '../types/blockchain';
+import { Election, Nominee, Arbitrator } from '../types/blockchain';
 
 const NEXT_PUBLIC_ARBITRATION_CONTRACT = process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT
 
@@ -26,6 +26,15 @@ export const FETCH_NOMINEES = async (): Promise<Nominee[]> => {
 		scope: NEXT_PUBLIC_ARBITRATION_CONTRACT,
 		table: 'nominees',
 		reverse: true
+	})
+	return rows
+}
+
+export const FETCH_ARBITRATORS = async (): Promise<Arbitrator[]> => {
+	const { rows } = await GET_TABLE_ROWS({
+		code: NEXT_PUBLIC_ARBITRATION_CONTRACT,
+		scope: NEXT_PUBLIC_ARBITRATION_CONTRACT,
+		table: 'arbitrators'
 	})
 	return rows
 }

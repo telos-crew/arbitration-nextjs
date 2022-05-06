@@ -3,11 +3,10 @@ import Head from 'next/head';
 import LayoutWrapper from '@iso/components/utility/layoutWrapper'
 import { Row, Col } from 'antd'
 import DashboardLayout from '../../containers/DashboardLayout/DashboardLayout'
-import ElectionsTable from '../../components/elections/ElectionsTable';
-import { FETCH_ELECTIONS, FETCH_NOMINEES, FETCH_CONFIG, FETCH_ARBITRATORS } from '../../constants';
+import { FETCH_ARBITRATORS } from '../../constants';
 import { Election, Nominee, Config, Arbitrator } from '../../types';
-import NomineesTable from '../../components/elections/NomineesTable';
 import basicStyle from "@iso/assets/styles/constants"
+import ArbitratorsTable from '../../components/elections/ArbitratorsTable';
 
 const { rowStyle, colStyle } = basicStyle
 
@@ -27,14 +26,9 @@ function Elections({ elections, nominees, config, arbitrators }: Props) {
       <DashboardLayout>
         <LayoutWrapper>
           <Row style={rowStyle} gutter={24}>
-            <Col md={24} sm={24} xs={24} style={colStyle}>
-              <NomineesTable nominees={nominees} elections={elections} config={config} />
+					<Col md={24} sm={24} xs={24} style={colStyle}>
+              <ArbitratorsTable arbitrators={arbitrators} />
             </Col>
-          </Row>
-          <Row style={rowStyle} gutter={24}>
-			      <Col md={24} sm={24} xs={24} style={colStyle}>
-              <ElectionsTable elections={elections} />
-            </Col>          
           </Row>
         </LayoutWrapper>
       </DashboardLayout>
@@ -43,17 +37,11 @@ function Elections({ elections, nominees, config, arbitrators }: Props) {
 }
 
 export async function getServerSideProps() {
-  const electionsPromise = FETCH_ELECTIONS()
-  const nomineesPromise = FETCH_NOMINEES()
-  const configPromise = FETCH_CONFIG()
   const arbitratorsPromise = FETCH_ARBITRATORS()
-  const [elections, nominees, config, arbitrators] = await Promise.all([electionsPromise, nomineesPromise, configPromise, arbitratorsPromise])
+  const [arbitrators] = await Promise.all([arbitratorsPromise])
 
 	return {
 		props: {
-			elections,
-      nominees,
-      config,
       arbitrators
 		}
 	}
