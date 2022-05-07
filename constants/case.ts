@@ -1,3 +1,7 @@
+import { GET_TABLE_ROWS } from "./";
+
+const NEXT_PUBLIC_ARBITRATION_CONTRACT = process.env.NEXT_PUBLIC_ARBITRATION_CONTRACT
+
 export const CASE_STATUS = {
 	0: 'Case Setup',			// 0
 	1: 'Awaiting Arbs',		// 1
@@ -21,3 +25,14 @@ export const CASE_STATUS_LIST = [
 	'Resolved',			// 7
 	'Dismissed'			// 8 NOTE: Dismissed cases advance and stop here	
 ]
+
+export const FETCH_CASE_FILES = async (case_id?: number): Promise<any> => {
+	const { rows } = await GET_TABLE_ROWS({
+		code: NEXT_PUBLIC_ARBITRATION_CONTRACT,
+		scope: NEXT_PUBLIC_ARBITRATION_CONTRACT,
+		table: 'casefiles',
+		upper_bound: case_id,
+		lower_bound: case_id
+	});
+	return rows
+}

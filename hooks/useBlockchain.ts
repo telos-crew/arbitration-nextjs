@@ -293,7 +293,45 @@ const useBlockchain = () => {
       actions
     })
     return signingRequest
-  }  
+  }
+
+  const CHANGE_ARB_STATUS = async (data: { arbitrator: string, new_status: number }, callbackRoute?: string) => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'newarbstatus',
+        authorization: GET_AUTHORIZATION(),
+        data
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }
+
+  const ASSIGN_TO_CASE = async (case_id: number, callbackRoute?: string) => {
+    const data = {
+      case_id,
+      arb_to_assign: identity
+    }
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'assigntocase',
+        authorization: GET_AUTHORIZATION(),
+        data
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }
 
 	return {
     GET_AUTHORIZATION,
@@ -311,6 +349,8 @@ const useBlockchain = () => {
     REMOVE_CLAIM,
     FETCH_ELECTIONS,
     REG_ARB,
+    CHANGE_ARB_STATUS,
+    ASSIGN_TO_CASE,
     UNREG_NOMINEE
 	}
 }

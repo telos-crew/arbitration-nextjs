@@ -6,12 +6,12 @@ import LayoutWrapper from '@iso/components/utility/layoutWrapper'
 import CaseFilesTable from '../components/cases/CaseFilesTable'
 import DashboardLayout from '../containers/DashboardLayout/DashboardLayout'
 import Forms from '../containers/Forms/Forms';
-import { FETCH_CONFIG } from '../constants';
+import { FETCH_CONFIG, FETCH_CASE_FILES } from '../constants';
 import ConfigTable from '../components/config/ConfigTable';
 
 const { rowStyle, colStyle } = basicStyle
 
-const Home = ({ config }) => {
+const Home = ({ config, caseFiles }) => {
   return (
     <>
       <Head>
@@ -26,7 +26,7 @@ const Home = ({ config }) => {
           </Row>
           <Row style={rowStyle} gutter={24}>
 			      <Col md={24} sm={24} xs={24} style={colStyle}>          
-              <CaseFilesTable />
+              <CaseFilesTable caseFiles={caseFiles} config={config} />
               </Col>
             </Row>
           <Forms />
@@ -37,10 +37,13 @@ const Home = ({ config }) => {
 }
 
 export async function getServerSideProps() {
-  const config = await FETCH_CONFIG()
+  const configPromise = FETCH_CONFIG()
+  const caseFilesPromise = FETCH_CASE_FILES()
+  const [config, caseFiles] = await Promise.all([configPromise, caseFilesPromise])
 	return {
 		props: {
-      config
+      config,
+      caseFiles
 		}
 	}
 }

@@ -7,6 +7,8 @@ import { FETCH_ARBITRATORS } from '../../constants';
 import { Election, Nominee, Config, Arbitrator } from '../../types';
 import basicStyle from "@iso/assets/styles/constants"
 import ArbitratorsTable from '../../components/arbitrators/ArbitratorsTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../types/redux';
 
 const { rowStyle, colStyle } = basicStyle
 

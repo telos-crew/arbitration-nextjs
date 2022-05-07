@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import styles from './ProfileCell.module.scss'
 import { FETCH_PROFILE } from '../../constants/profiles';
+import classnames from 'classnames';
 
-type Props = {}
+type Props = {
+	account_name: string,
+	size?: 'small' | 'medium' | 'large'
+}
 
-const ProfileCell = ({ account_name }) => {
+const ProfileCell = ({ account_name, size }: Props) => {
 	const [profile, setProfile] = useState(null)
+	const [isImageError, setIsImageError] = useState(false)
 
 	const fetchProfile = async () => {
 		try {
@@ -14,6 +19,11 @@ const ProfileCell = ({ account_name }) => {
 		} catch (err) {
 			console.warn(err)
 		}
+	}
+
+	const onImageError = () => {
+		console.log('onImageError')
+		setIsImageError(true)
 	}
 
 	useEffect(() => {
@@ -28,8 +38,8 @@ const ProfileCell = ({ account_name }) => {
 
 	return (
 		<div className={styles.cellContent}>
-			{!!avatar && (
-				<img src={avatar} className={styles.avatar} />
+			{!!avatar && !isImageError && (
+				<img src={avatar} className={classnames([styles.avatar, styles[size]])} onerror={onImageError} />
 			)}
 			<div className={styles.cellInfo}>
 				{!!display_name && <><div>{display_name}</div></>}

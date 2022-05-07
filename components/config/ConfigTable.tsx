@@ -2,6 +2,7 @@ import React from 'react'
 import { Config } from '../../types';
 import { Card, Table } from 'antd'
 import { secondsToDhms } from '../../util';
+import ProfileCell from '../profiles/ProfileCell';
 
 type Props = {
 	config: Config
@@ -11,7 +12,8 @@ const ConfigTable = ({ config }: Props) => {
 
 	const columns = [{
 		title: 'Admin',
-		dataIndex: 'admin'
+		dataIndex: 'admin',
+		render: (text: string) => <ProfileCell account_name={text} size='small' />
 	},{
 		title: 'Arbitrator Term',
 		dataIndex: 'arb_term_length',

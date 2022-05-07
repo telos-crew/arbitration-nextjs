@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Col, Card, Row, Table } from "antd"
+import { Card, Table } from "antd"
 import basicStyle from "@iso/assets/styles/constants"
 import { FETCH_ARBITRATORS } from '../../constants/elections';
 import { Arbitrator } from '../../types/blockchain';
 import ProfileCell from '../profiles/ProfileCell';
+import { RootState } from '../../types';
+import { useSelector } from 'react-redux';
+import { ARBITRATOR_STATUS_LIST } from '../../constants/arbitrators';
+import ChangeArbStatusDropdown from './ChangeArbStatusDropdown';
 
 const { rowStyle, colStyle } = basicStyle;
 
@@ -12,6 +16,7 @@ type Props = {
 }
 
 const ArbitratorsTable = ({ arbitrators: initialArbitrators }: Props) => {
+	const { identity } = useSelector((state: RootState) => state.auth);
 	const [arbitrators, setArbitrators] = useState(initialArbitrators)
 
 	const fetchArbitrators = async () => {
@@ -38,6 +43,7 @@ const ArbitratorsTable = ({ arbitrators: initialArbitrators }: Props) => {
 	},{
 		title: 'Status',
 		dataIndex: 'arb_status',
+		render: (text: number) => <span>{ARBITRATOR_STATUS_LIST[text]}</span>
 	},{
 		title: 'Open Cases',
 		dataIndex: 'open_case_ids',
@@ -56,7 +62,10 @@ const ArbitratorsTable = ({ arbitrators: initialArbitrators }: Props) => {
 	},{
 		title: 'Languages',
 		dataIndex: 'languages',
-	},]
+	}, {
+		title: 'Actions',
+		render: (text, record) => (record.arb === identity && <ChangeArbStatusDropdown />)
+	}]
 
 	return (
 		<Card title='Arbitrators'>

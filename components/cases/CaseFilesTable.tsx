@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Table, Button } from "antd"
-import basicStyle from "@iso/assets/styles/constants"
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import FileCaseModal from './FileCaseModal';
@@ -8,14 +7,21 @@ import ClaimsModal from './ClaimsModal';
 import { CaseFile, RootState } from '../../types';
 import { CASE_STATUS_LIST } from '../../constants/case';
 import { LANG_CODES_LIST } from '../../constants/lang';
+import ProfileCell from '../profiles/ProfileCell';
 
-const CaseFilesTable = () => {
+type Props = {
+	caseFiles: CaseFile[]
+}
+
+const CaseFilesTable = ({ caseFiles: initialCaseFiles, config }: Props) => {
+	const { FETCH_CASE_FILES, SHRED_CASE, READY_CASE, ASSIGN_TO_CASE } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const { FETCH_CASE_FILES, SHRED_CASE, READY_CASE } = useBlockchain()
-	const [caseFiles, setCaseFiles] = useState()
+	const [caseFiles, setCaseFiles] = useState(initialCaseFiles)
 	const [isFileCaseModalVisible, setIsFilecaseModalVisible] = useState(false)
 	const [isClaimsModalVisible, setIsClaimsModalVisible] = useState(false)
 	const [activeCaseId, setActiveCaseId] = useState(null)
+
+	const { admin } = config
 
 	const columns = [{
 		title: 'ID',
@@ -32,14 +38,19 @@ const CaseFilesTable = () => {
 		title: 'Claimant',
 		dataIndex: 'claimant',
 		key: 'claimant',
+		render: (text: string) => <ProfileCell account_name={text} size='small' />
 	},{
 		title: 'Respondant',
 		dataIndex: 'respondant',
 		key: 'respondant',
+		render: (text: string) => <ProfileCell account_name={text} size='small' />
 	},{
 		title: 'Arbitrators',
 		dataIndex: 'arbitrators',
 		key: 'arbitrators',
+		render: (text: string[]) => (
+			text.map((arb: string) => <ProfileCell account_name={arb} key={arb} size='small' />)
+		)
 	},{
 		title: 'Approvals',
 		dataIndex: 'approvals',
@@ -72,19 +83,29 @@ const CaseFilesTable = () => {
 		title: 'Actions',
 		key: 'actions',
 		render: (text: string, record: any) => (
-			identity === record.claimant && (
-				<>
-				{record.case_status === 0 && (
-					<Button onClick={() => onClickStartCase(record.case_id)} type='primary'>Start Case</Button>
+			<>
+				{identity === record.claimant && (
+					<>
+					{record.case_status === 0 && (
+						<Button onClick={() => onClickStartCase(record.case_id)} type='primary'>Start Case</Button>
+					)}
+						&nbsp;&nbsp;
+						<Button onClick={() => onClickDelete(record.case_id)} danger>Delete</Button>
+					</>
 				)}
-					&nbsp;&nbsp;
-					<Button onClick={() => onClickDelete(record.case_id)} danger>Delete</Button>
-				</>
-			)
+				{identity === admin && <Button onClick={() => onClickAssign(record.case_id)}>Assign Self</Button>}
+			</>
 		)
 	}]
 
-	const { rowStyle, colStyle } = basicStyle;
+	const onClickAssign = async (case_id: number) => {
+		try {
+			const url = await ASSIGN_TO_CASE(case_id)
+			window.open(url, '_self')
+		} catch (err) {
+			console.warn(err)
+		}
+	}	
 
 	const fetchCaseFiles = async () => {
 		try {
@@ -96,7 +117,6 @@ const CaseFilesTable = () => {
 	}
 
 	useEffect(() => {
-		fetchCaseFiles()
 		const interval = setInterval(fetchCaseFiles, 10000)
 
 		return () => {
@@ -131,8 +151,6 @@ const CaseFilesTable = () => {
 			}
 		}
 	}
-
-	console.log('caseFiles: ', caseFiles)
 
 	return (
 		<Card title='Case Files'>
