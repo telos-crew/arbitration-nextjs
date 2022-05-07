@@ -112,13 +112,19 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 			console.warn(err)
 		}
 	}
-
-
+	console.log('claimsTable caseFile', caseFile)
+	const isCaseSetup = caseFile.case_status === 0
 
 	return (
 		<>
 			{!!caseFile && isAddClaimFormVisible && (
-				<Modal visible={isAddClaimFormVisible} onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} footer={null} className={styles.addClaimModal}>
+				<Modal
+					visible={isAddClaimFormVisible}
+					onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)}
+					footer={null}
+					className={styles.addClaimModal}
+					title='Add Case Claim'
+				>
 					<AddClaimForm
 						onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)}
 						case_id={caseFile.case_id}
@@ -128,7 +134,7 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 				</Modal>
 			)}
 			<div>
-				{identity === caseFile.claimant  && (
+				{(identity === caseFile.claimant) && isCaseSetup && (
 					<>
 						<Button onClick={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} type='primary'>Add New Claim</Button><br /><br />
 					</>

@@ -28,6 +28,7 @@ const DstorUpload = ({ setHash }: Props) => {
 				maxBodyLength: 100000000
 			})
 			setProgress(100)
+			console.log('now set hash')
 			setHash(Hash)
 		} catch (err) {
 			console.warn(err)

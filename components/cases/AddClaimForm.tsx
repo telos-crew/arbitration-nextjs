@@ -46,6 +46,7 @@ const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 	}
 
 	const setClaimLink = (hash: string) => {
+		console.log('setClaimLink hash', hash)
 		setInput({
 			...input,
 			claim_link: hash
@@ -77,13 +78,9 @@ const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 	}
 
 	return (
-		<Box
-			title='Add Case Claim'
-			subtitle='Add a claim to an existing case'
-		>
-			<ContentHolder>
 				<Row style={{ ...rowStyle, display: !isVisible ? 'none' : 'flex' }} gutter={24}>
 					<Col md={12} sm={12} xs={24} style={colStyle}>
+						<p>Add a claim to an existing case:</p><br />
 						<InputGroup>
 							<Input
 								defaultValue={input.claimant}
@@ -97,22 +94,21 @@ const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 								onChange={(e) => handleTextChange(e, 'claim_link')}
 								addonBefore='IPFS Hash'
 								placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
+								value={input.claim_link}
 							/>
 						</InputGroup>
 					</Col>
-					<Col md={12} sm={12} xs={24} style={colStyle}>
+					<Col md={12} sm={12} xs={24} style={colStyle} className='file-upload-area'>
 						<DstorUpload setHash={setClaimLink} />
 					</Col>
+					<br />
+					<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
+					<Button onClick={onCancel}>Cancel</Button>
+					<br /><br />
+					{errorMessage && (
+						<Alert message={errorMessage} type="error" />
+					)}
 				</Row>
-			</ContentHolder>
-			<br />
-			<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
-			<Button onClick={onCancel}>Cancel</Button>
-			<br /><br />
-			{errorMessage && (
-				<Alert message={errorMessage} type="error" />
-			)}
-		</Box>
 	)
 }
 
