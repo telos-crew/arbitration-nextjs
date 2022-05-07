@@ -7,7 +7,7 @@ import basicStyle from "@iso/assets/styles/constants"
 import ClaimsTable from '../../components/cases/ClaimsTable';
 import { FETCH_CASE_FILES } from '../../constants/case';
 import { FETCH_CLAIMS } from '../../constants/claim';
-import { CaseFile, Claim, Config } from '../../types/';
+import { CaseFile, Claim, Config } from '../../types';
 import CaseFilesTable from '../../components/cases/CaseFilesTable';
 import { FETCH_CONFIG } from '../../constants';
 

@@ -40,7 +40,10 @@
 }
 
 .dropzone {
-	min-height: 150px;
+	display: flex;
+	flex: 1;
+	justify-content: center;
+	align-items: center;
 	border: 1px solid rgba(42,42,42,.05);
 	background: hsla(0,0%,80%,.15);
 	padding: 20px;

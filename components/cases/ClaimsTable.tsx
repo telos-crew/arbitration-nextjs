@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Table, Button, Modal } from "antd"
 import { useSelector } from 'react-redux';
 import { CaseFile, RootState } from '../../types';
+import styles from './ClaimsTable.module.scss'
 import useBlockchain from '../../hooks/useBlockchain';
 import AddClaimForm from './AddClaimForm';
 import { Claim } from '../../types';
-import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES } from '../../constants';
+import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES } from '../../constants'
 
 type Props = {
 	claims: Claim[],
@@ -112,24 +113,28 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 		}
 	}
 
+
+
 	return (
 		<>
-			{!!caseFile && (identity === caseFile.claimant) && (
-				<>
+			{!!caseFile && isAddClaimFormVisible && (
+				<Modal visible={isAddClaimFormVisible} onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} footer={null} className={styles.addClaimModal}>
 					<AddClaimForm
 						onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)}
 						case_id={caseFile.case_id}
 						isVisible={isAddClaimFormVisible}
 						toggle={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)}
 					/>
-				</>
+				</Modal>
 			)}
-			{!isAddClaimFormVisible && (
-				<div>
-					<Button onClick={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} type='primary'>Add New Claim</Button><br /><br />
-					<Table columns={columns} dataSource={claims} key={'claim_id'} />
-				</div>
-			)}
+			<div>
+				{identity === caseFile.claimant  && (
+					<>
+						<Button onClick={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} type='primary'>Add New Claim</Button><br /><br />
+					</>
+				)}
+				<Table columns={columns} dataSource={claims} key={'claim_id'} />
+			</div>
 		</>
 	)
 }

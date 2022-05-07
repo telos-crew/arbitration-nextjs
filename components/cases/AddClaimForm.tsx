@@ -10,6 +10,7 @@ import { validateName, validateIpfsHash } from '../../util/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
+import DstorUpload from '../utility/DstorUpload';
 
 const { rowStyle, colStyle } = basicStyle;
 
@@ -44,6 +45,13 @@ const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 		})
 	}
 
+	const setClaimLink = (hash: string) => {
+		setInput({
+			...input,
+			claim_link: hash
+		})
+	}
+
 	const submit = async (type: string) => {
 		const { claimant, claim_link } = input
 		if (!claimant || !claim_link) {
@@ -69,39 +77,42 @@ const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 	}
 
 	return (
-		<Row style={{ ...rowStyle, display: !isVisible ? 'none' : 'flex' }} gutter={24}>
-			<Col md={24} sm={24} xs={24} style={colStyle}>
-				<Box
-            title='Add Case Claim'
-            subtitle='Add a claim to an existing case'
-          >
-            <ContentHolder>
-							<InputGroup>
-              	<Input
-									defaultValue={input.claimant}
-									onChange={(e) => handleTextChange(e, 'claimant')}
-									addonBefore='Claimant'
-									placeholder="myaccount111"
-								/>
-							</InputGroup>
-							<InputGroup>
-								<Input
-									onChange={(e) => handleTextChange(e, 'claim_link')}
-									addonBefore='IPFS Hash'
-									placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
-								/>
-							</InputGroup>
-            </ContentHolder>
-						<br />
-						<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
-						<Button onClick={onCancel}>Cancel</Button>
-						<br /><br />
-						{errorMessage && (
-							<Alert message={errorMessage} type="error" />
-						)}
-          </Box>
-			</Col>
-		</Row>
+		<Box
+			title='Add Case Claim'
+			subtitle='Add a claim to an existing case'
+		>
+			<ContentHolder>
+				<Row style={{ ...rowStyle, display: !isVisible ? 'none' : 'flex' }} gutter={24}>
+					<Col md={12} sm={12} xs={24} style={colStyle}>
+						<InputGroup>
+							<Input
+								defaultValue={input.claimant}
+								onChange={(e) => handleTextChange(e, 'claimant')}
+								addonBefore='Claimant'
+								placeholder="myaccount111"
+							/>
+						</InputGroup>
+						<InputGroup>
+							<Input
+								onChange={(e) => handleTextChange(e, 'claim_link')}
+								addonBefore='IPFS Hash'
+								placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
+							/>
+						</InputGroup>
+					</Col>
+					<Col md={12} sm={12} xs={24} style={colStyle}>
+						<DstorUpload setHash={setClaimLink} />
+					</Col>
+				</Row>
+			</ContentHolder>
+			<br />
+			<Button onClick={() => submit('add')} type="primary">Add</Button>&nbsp;&nbsp;
+			<Button onClick={onCancel}>Cancel</Button>
+			<br /><br />
+			{errorMessage && (
+				<Alert message={errorMessage} type="error" />
+			)}
+		</Box>
 	)
 }
 

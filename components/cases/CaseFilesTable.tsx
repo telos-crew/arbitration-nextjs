@@ -4,14 +4,15 @@ import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import FileCaseModal from './FileCaseModal';
 import ClaimsModal from './ClaimsTable';
-import { CaseFile, RootState } from '../../types';
+import { CaseFile, Config, RootState } from '../../types';
 import { CASE_STATUS_LIST } from '../../constants/case';
 import { LANG_CODES_LIST } from '../../constants/lang';
 import ProfileCell from '../profiles/ProfileCell';
 
 type Props = {
 	caseFiles: CaseFile[],
-	case_id?: number
+	case_id?: number,
+	config: Config
 }
 
 const CaseFilesTable = ({ caseFiles: initialCaseFiles, config, case_id }: Props) => {
@@ -19,8 +20,6 @@ const CaseFilesTable = ({ caseFiles: initialCaseFiles, config, case_id }: Props)
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [caseFiles, setCaseFiles] = useState(initialCaseFiles)
 	const [isFileCaseModalVisible, setIsFilecaseModalVisible] = useState(false)
-	const [isClaimsModalVisible, setIsClaimsModalVisible] = useState(false)
-	const [activeCaseId, setActiveCaseId] = useState(null)
 
 	const { admin } = config
 
@@ -122,12 +121,6 @@ const CaseFilesTable = ({ caseFiles: initialCaseFiles, config, case_id }: Props)
 		}
 	}, [])
 
-	const openClaimsModal = (record: any) => {
-		console.log('openClaimsModal, record: ', record)
-		setIsClaimsModalVisible(true)
-		setActiveCaseId(record.case_id)
-	}
-
 	const onClickStartCase = async (case_id: number) => {
 		if (confirm(`Are you sure you want to start this case (id: ${case_id})?`)) {
 			try {
@@ -161,9 +154,6 @@ const CaseFilesTable = ({ caseFiles: initialCaseFiles, config, case_id }: Props)
 			<Table columns={columns} dataSource={caseFiles} key={'case_id'} />
 			{!!identity && (
 				<FileCaseModal isVisible={isFileCaseModalVisible} toggle={() => setIsFilecaseModalVisible(!isFileCaseModalVisible)} />
-			)}
-			{isClaimsModalVisible && (
-				<ClaimsModal isVisible={isClaimsModalVisible} toggle={() => setIsClaimsModalVisible(!isClaimsModalVisible)} case_id={activeCaseId} />
 			)}
 		</Card>
 	)
