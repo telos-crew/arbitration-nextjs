@@ -4,7 +4,7 @@ import LayoutWrapper from '@iso/components/utility/layoutWrapper'
 import { Row, Col } from 'antd'
 import DashboardLayout from '../../containers/DashboardLayout/DashboardLayout'
 import basicStyle from "@iso/assets/styles/constants"
-import ClaimsModal from '../../components/cases/ClaimsModal';
+import ClaimsTable from '../../components/cases/ClaimsTable';
 import { FETCH_CASE_FILES } from '../../constants/case';
 import { FETCH_CLAIMS } from '../../constants/claim';
 import { CaseFile, Claim, Config } from '../../types/';
@@ -39,7 +39,7 @@ function CaseFiles({ claims, caseFiles, config }: Props) {
           <br /><br />
           <Row style={rowStyle} gutter={24}>
 					  <Col md={24} sm={24} xs={24} style={colStyle}>
-              <ClaimsModal case_id={case_id} />
+              <ClaimsTable case_id={case_id} caseFile={caseFile} claims={claims} />
             </Col>
           </Row>
         </LayoutWrapper>

@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Modal } from "antd"
 import { useSelector } from 'react-redux';
-import { RootState } from '../../types';
+import { CaseFile, RootState } from '../../types';
 import useBlockchain from '../../hooks/useBlockchain';
 import AddClaimForm from './AddClaimForm';
 import { Claim } from '../../types';
-import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES } from '../../constants/';
+import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES } from '../../constants';
 
 type Props = {
 	claims: Claim[],
-	case_id: number
+	case_id: number,
+	caseFile: CaseFile
 }
 
-const ClaimsModal = ({ claims: initialClaims, case_id }: Props) => {
+const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id }: Props) => {
 	const { FETCH_CLAIMS, REMOVE_CLAIM } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const [caseFile, setCaseFile] = useState(null)
+	const [caseFile, setCaseFile] = useState(initialCaseFile)
 	const [claims, setClaims] = useState(initialClaims)
 	const [isAddClaimFormVisible, setIsAddClaimFormVisible] = useState(false)
 
@@ -133,4 +134,4 @@ const ClaimsModal = ({ claims: initialClaims, case_id }: Props) => {
 	)
 }
 
-export default ClaimsModal
+export default ClaimsTable

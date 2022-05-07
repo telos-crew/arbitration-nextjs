@@ -3,7 +3,7 @@ import { Card, Table, Button } from "antd"
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import FileCaseModal from './FileCaseModal';
-import ClaimsModal from './ClaimsModal';
+import ClaimsModal from './ClaimsTable';
 import { CaseFile, RootState } from '../../types';
 import { CASE_STATUS_LIST } from '../../constants/case';
 import { LANG_CODES_LIST } from '../../constants/lang';
