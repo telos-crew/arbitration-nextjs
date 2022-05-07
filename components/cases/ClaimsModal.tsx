@@ -4,20 +4,19 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
 import useBlockchain from '../../hooks/useBlockchain';
 import AddClaimForm from './AddClaimForm';
-import { Claim } from '../../types/blockchain';
-import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST  } from '../../constants/claim';
+import { Claim } from '../../types';
+import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES } from '../../constants/';
 
 type Props = {
-	isVisible: boolean,
-	toggle: () => void,
+	claims: Claim[],
 	case_id: number
 }
 
-const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
-	const { FETCH_CLAIMS, FETCH_CASE_FILES, REMOVE_CLAIM } = useBlockchain()
+const ClaimsModal = ({ claims: initialClaims, case_id }: Props) => {
+	const { FETCH_CLAIMS, REMOVE_CLAIM } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [caseFile, setCaseFile] = useState(null)
-	const [claims, setClaims] = useState(null)
+	const [claims, setClaims] = useState(initialClaims)
 	const [isAddClaimFormVisible, setIsAddClaimFormVisible] = useState(false)
 
 	const columns = [{
@@ -70,16 +69,6 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 			)
 	}]
 
-	const fetchClaims = async () => {
-		try {
-			const response = await FETCH_CLAIMS(case_id)
-			console.log('ClaimsModal FETCH_CLAIMS response: ', response)
-			setClaims(response)
-		} catch (err) {
-			console.warn(err)
-		}
-	}
-
 	const fetchCaseFile = async () => {
 		try {
 			const [response] = await FETCH_CASE_FILES(case_id)
@@ -89,10 +78,16 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 		}
 	}
 
-	useEffect(() => {
-		fetchClaims()
-		fetchCaseFile()
+	const fetchClaims = async () => {
+		try {
+			const response = await FETCH_CLAIMS(case_id)
+			setClaims(response)
+		} catch (err) {
+			console.warn(err)
+		}
+	}
 
+	useEffect(() => {
 		const interval = setInterval(() => {
 			fetchClaims()
 			fetchCaseFile()
@@ -117,7 +112,7 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 	}
 
 	return (
-		<Modal title="Claims" visible={isVisible} onOk={toggle} onCancel={toggle} className='claimsModal'>
+		<>
 			{!!caseFile && (identity === caseFile.claimant) && (
 				<>
 					<AddClaimForm
@@ -134,7 +129,7 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 					<Table columns={columns} dataSource={claims} key={'claim_id'} />
 				</div>
 			)}
-		</Modal>
+		</>
 	)
 }
 

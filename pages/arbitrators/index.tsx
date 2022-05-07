@@ -19,11 +19,11 @@ type Props = {
   config: Config
 }
 
-function Elections({ arbitrators }: Props) {
+function Arbitrators({ arbitrators }: Props) {
   return (
     <>
       <Head>
-        <title>Elections | Telos Arbitration</title>
+        <title>Arbitrators | Telos Arbitration</title>
       </Head>
       <DashboardLayout>
         <LayoutWrapper>
@@ -49,4 +49,4 @@ export async function getServerSideProps() {
 	}
 }
 
-export default Elections
+export default Arbitrators

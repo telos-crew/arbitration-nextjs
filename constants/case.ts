@@ -31,8 +31,8 @@ export const FETCH_CASE_FILES = async (case_id?: number): Promise<any> => {
 		code: NEXT_PUBLIC_ARBITRATION_CONTRACT,
 		scope: NEXT_PUBLIC_ARBITRATION_CONTRACT,
 		table: 'casefiles',
-		upper_bound: case_id,
-		lower_bound: case_id
+		upper_bound: case_id.toString(),
+		lower_bound: case_id.toString()
 	});
 	return rows
 }

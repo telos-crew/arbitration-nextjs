@@ -24,9 +24,9 @@ const Home = ({ config, caseFiles }) => {
               <ConfigTable config={config} />
             </Col>
           </Row>
-          <Row style={rowStyle} gutter={24}>
-			      <Col md={24} sm={24} xs={24} style={colStyle}>          
-              <CaseFilesTable caseFiles={caseFiles} config={config} />
+            <Row style={rowStyle} gutter={24}>
+			        <Col md={24} sm={24} xs={24} style={colStyle}>          
+                <CaseFilesTable caseFiles={caseFiles} config={config} />
               </Col>
             </Row>
           <Forms />

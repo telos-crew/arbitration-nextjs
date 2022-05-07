@@ -5,6 +5,12 @@ export default [
 		label: 'sidebar.home',
 		leftIcon: null,
 		withoutDashboard: true,
+	},{
+		key: 'casefile',
+		path: '/case-file',
+		label: 'sidebar.casefile',
+		leftIcon: null,
+		withoutDashboard: true,
 	}, {
 		key: 'arbitrators',
 		path: '/arbitrators',

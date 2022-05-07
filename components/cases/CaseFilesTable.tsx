@@ -10,10 +10,11 @@ import { LANG_CODES_LIST } from '../../constants/lang';
 import ProfileCell from '../profiles/ProfileCell';
 
 type Props = {
-	caseFiles: CaseFile[]
+	caseFiles: CaseFile[],
+	case_id?: number
 }
 
-const CaseFilesTable = ({ caseFiles: initialCaseFiles, config }: Props) => {
+const CaseFilesTable = ({ caseFiles: initialCaseFiles, config, case_id }: Props) => {
 	const { FETCH_CASE_FILES, SHRED_CASE, READY_CASE, ASSIGN_TO_CASE } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [caseFiles, setCaseFiles] = useState(initialCaseFiles)
@@ -58,10 +59,7 @@ const CaseFilesTable = ({ caseFiles: initialCaseFiles, config }: Props) => {
 	},{
 		title: '# of Claims',
 		dataIndex: 'number_claims',
-		key: 'number_claims',
-		render: (text: string, record: any) => (
-			<><span>{text}</span>&nbsp;&nbsp;&nbsp;<Button onClick={() => openClaimsModal(record)}>View</Button></>
-		)
+		key: 'number_claims'
 	},{
 		title: 'Languages',
 		dataIndex: 'required_langs',
@@ -109,7 +107,7 @@ const CaseFilesTable = ({ caseFiles: initialCaseFiles, config }: Props) => {
 
 	const fetchCaseFiles = async () => {
 		try {
-			const response = await FETCH_CASE_FILES()
+			const response = await FETCH_CASE_FILES(case_id)
 			setCaseFiles(response)
 		} catch (err) {
 			console.warn(err)
