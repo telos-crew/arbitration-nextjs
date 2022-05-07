@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Card, Typography, Row, Table, Button, Modal } from "antd"
+import { Table, Button, Modal } from "antd"
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types';
 import useBlockchain from '../../hooks/useBlockchain';
 import AddClaimForm from './AddClaimForm';
 import { Claim } from '../../types/blockchain';
-import { DECISION_CLASS_LIST, CASE_STATUS_LIST } from '../../constants/claim';
+import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST  } from '../../constants/claim';
 
 type Props = {
 	isVisible: boolean,
@@ -44,7 +44,8 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 	},{
 		title: 'Status',
 		dataIndex: 'status',
-		key: 'status'
+		key: 'status',
+		render: (text: string) => <span>{CLAIM_STATUS_LIST[text]}</span>
 	},{
 		title: 'Decision Class',
 		dataIndex: 'decision_class',
@@ -54,10 +55,19 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 		title: 'Actions',
 		key: 'actions',
 		render: (text: any, claim: Claim) => (
-			caseFile && (caseFile.claimant === identity) && (
-				<><Button onClick={() => onRemoveClaim(claim)} danger>Delete</Button></>
+			<>
+					{caseFile && (caseFile.claimant === identity) && (
+						<>
+							<Button onClick={() => onRemoveClaim(claim)} danger>Delete</Button>&nbsp;
+						</>
+					)}
+					{caseFile && (caseFile.respondant === identity) && (
+						<>
+							Hello
+						</>
+					)}
+				</>
 			)
-		)
 	}]
 
 	const fetchClaims = async () => {
@@ -108,7 +118,7 @@ const ClaimsModal = ({ isVisible, toggle, case_id }: Props) => {
 
 	return (
 		<Modal title="Claims" visible={isVisible} onOk={toggle} onCancel={toggle} className='claimsModal'>
-			{!!caseFile && (
+			{!!caseFile && (identity === caseFile.claimant) && (
 				<>
 					<AddClaimForm
 						onCancel={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)}
