@@ -4,8 +4,6 @@ import basicStyle from "@iso/assets/styles/constants"
 import Input, {
   InputGroup,
 } from '@iso/components/uielements/input';
-import Box from '@iso/components/utility/box';
-import ContentHolder from '@iso/components/utility/contentHolder';
 import { validateName, validateIpfsHash } from '../../util/blockchain';
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
@@ -17,8 +15,7 @@ const { rowStyle, colStyle } = basicStyle;
 // name claimant, string claim_link, vector<uint8_t> lang_codes,std::optional<name> respondant
 
 const INITIAL_INPUT = {
-	claim_link: '',
-	claimant: ''
+	claim_link: ''
 }
 
 type Props = {
@@ -31,45 +28,25 @@ type Props = {
 const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 	const { ADD_CLAIM } = useBlockchain()
 	const { identity } = useSelector((state: RootState) => state.auth)
-	const [input, setInput] = useState({
-		...INITIAL_INPUT,
-		claimant: identity
-	})
+	const [claimLink, setClaimLink] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
 
-	const handleTextChange = (e: any, field: string) => {
-		setErrorMessage('')
-		setInput({
-			...input,
-			[field]: e.target.value
-		})
-	}
-
-	const setClaimLink = (hash: string) => {
-		console.log('setClaimLink hash', hash)
-		setInput({
-			...input,
-			claim_link: hash
-		})
-	}
-
 	const submit = async (type: string) => {
-		const { claimant, claim_link } = input
-		if (!claimant || !claim_link) {
+		if (!claimLink) {
 			setErrorMessage('Please fill all the fields')
 			return
 		}
-		if (!validateName(claimant)) {
-			setErrorMessage('Invalid claimant name')
-			return
-		}
-		if (!validateIpfsHash(claim_link)) {
+		if (!validateIpfsHash(claimLink)) {
 			setErrorMessage('Invalid IPFS hash, should start with \'Qm\' and be 46 or 49 characters in length')
 			return
 		}
 
 		try {
-			const url = await ADD_CLAIM({ ...input, case_id })
+			const url = await ADD_CLAIM({
+				claim_link: claimLink,
+				claimant: identity,	
+				case_id
+			})
 			window.open(url, '_self')
 			toggle()
 		} catch (err) {
@@ -83,18 +60,19 @@ const AddClaimForm = ({ onCancel, case_id, isVisible, toggle }: Props) => {
 						<p>Add a claim to an existing case:</p><br />
 						<InputGroup>
 							<Input
-								defaultValue={input.claimant}
-								onChange={(e) => handleTextChange(e, 'claimant')}
+								defaultValue={identity}
 								addonBefore='Claimant'
 								placeholder="myaccount111"
+								value={identity}
+								disabled
 							/>
 						</InputGroup>
 						<InputGroup>
 							<Input
-								onChange={(e) => handleTextChange(e, 'claim_link')}
+								onChange={(text) => setClaimLink(text)}
 								addonBefore='IPFS Hash'
 								placeholder="Qmdn7bZ8z25bM735R91rFkbvkBXfvo5oEtRQadjb2RdMce"
-								value={input.claim_link}
+								value={claimLink}
 							/>
 						</InputGroup>
 					</Col>

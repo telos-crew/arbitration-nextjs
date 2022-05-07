@@ -226,6 +226,30 @@ const useBlockchain = () => {
     return signingRequest
   }
 
+  type RespondData = {
+    case_id: number,
+    claim_id: number,
+    respondant: string,
+    response_link: string,
+  }
+
+  const RESPOND = async (data: RespondData, callbackRoute?: string): Promise<any> => {
+    const actions = [
+      {
+        account: CONFIG[chain].ARBITRACTION_CONTRACT,
+        name: 'respond',
+        authorization: GET_AUTHORIZATION(),
+        data
+      }
+    ]
+    const signingRequest = await CREATE_SIGNING_REQUEST({
+      callback: `${CONFIG[chain].NEXT_PUBLIC_APP_HOSTNAME}/${callbackRoute}`,
+      chainId: NEXT_PUBLIC_CHAIN_ID,
+      actions
+    })
+    return signingRequest
+  }  
+
   type RemoveClaimData = {
     case_id: number,
     claimant: string,
@@ -347,6 +371,7 @@ const useBlockchain = () => {
     FETCH_CLAIMS,
     ADD_CLAIM,
     REMOVE_CLAIM,
+    RESPOND,
     FETCH_ELECTIONS,
     REG_ARB,
     CHANGE_ARB_STATUS,

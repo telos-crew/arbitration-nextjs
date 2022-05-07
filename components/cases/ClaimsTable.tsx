@@ -7,6 +7,7 @@ import useBlockchain from '../../hooks/useBlockchain';
 import AddClaimForm from './AddClaimForm';
 import { Claim } from '../../types';
 import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES } from '../../constants'
+import ClaimResponseForm from './ClaimResponseForm';
 
 type Props = {
 	claims: Claim[],
@@ -19,7 +20,9 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 	const { identity } = useSelector((state: RootState) => state.auth)
 	const [caseFile, setCaseFile] = useState(initialCaseFile)
 	const [claims, setClaims] = useState(initialClaims)
+	const [activeClaimId, setActiveClaimId] = useState(null)
 	const [isAddClaimFormVisible, setIsAddClaimFormVisible] = useState(false)
+	const [isClaimResponseFormVisible, setIsClaimResponseFormVisible] = useState(false)
 
 	const columns = [{
 		title: 'Case ID',
@@ -64,7 +67,7 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 					)}
 					{caseFile && (caseFile.respondant === identity) && (
 						<>
-							Hello
+							<Button onClick={() => onPressRespond(claim)}>Respond</Button>&nbsp;
 						</>
 					)}
 				</>
@@ -112,8 +115,19 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 			console.warn(err)
 		}
 	}
-	console.log('claimsTable caseFile', caseFile)
+
+	const onPressRespond = (claim: Claim) => {
+		setActiveClaimId(claim.claim_id)
+		setIsClaimResponseFormVisible(true)
+	}
+
+	const onCloseClaimResponseForm = () => {
+		setActiveClaimId(null)
+		setIsClaimResponseFormVisible(false)
+	}
+
 	const isCaseSetup = caseFile.case_status === 0
+	const isAddClaimButtonVisible = isCaseSetup && (caseFile.claimant === identity)
 
 	return (
 		<>
@@ -133,8 +147,24 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 					/>
 				</Modal>
 			)}
+			{!!caseFile && isClaimResponseFormVisible && (
+				<Modal
+					visible={isClaimResponseFormVisible}
+					onCancel={() => setIsAddClaimFormVisible(!isClaimResponseFormVisible)}
+					footer={null}
+					className={styles.addClaimModal}
+					title='Respond to Claim'
+				>
+					<ClaimResponseForm
+						onCancel={onCloseClaimResponseForm}
+						case_id={caseFile.case_id}
+						toggle={() => setIsClaimResponseFormVisible(!isClaimResponseFormVisible)}
+						claim_id={activeClaimId}
+					/>
+				</Modal>
+			)}
 			<div>
-				{(identity === caseFile.claimant) && isCaseSetup && (
+				{isAddClaimButtonVisible && (
 					<>
 						<Button onClick={() => setIsAddClaimFormVisible(!isAddClaimFormVisible)} type='primary'>Add New Claim</Button><br /><br />
 					</>
