@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Table, Button } from "antd"
+import Link from 'next/link'
 import useBlockchain from '../../hooks/useBlockchain';
 import { useSelector } from 'react-redux';
 import FileCaseModal from './FileCaseModal';
@@ -90,6 +91,7 @@ const CaseFilesTable = ({ caseFiles: initialCaseFiles, config, case_id }: Props)
 						<Button onClick={() => onClickDelete(record.case_id)} danger>Delete</Button>
 					</>
 				)}
+				<Link href={`/casefile/${record.case_id}`}><Button>View</Button></Link>
 				{identity === admin && <Button onClick={() => onClickAssign(record.case_id)}>Assign Self</Button>}
 			</>
 		)

@@ -6,8 +6,9 @@ import styles from './ClaimsTable.module.scss'
 import useBlockchain from '../../hooks/useBlockchain';
 import AddClaimForm from './AddClaimForm';
 import { Claim } from '../../types';
-import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES } from '../../constants'
+import { DECISION_CLASS_LIST, CLAIM_STATUS_LIST, FETCH_CASE_FILES, CASE_STATUS_LIST } from '../../constants'
 import ClaimResponseForm from './ClaimResponseForm';
+import HashLink from '../utility/HashLink';
 
 type Props = {
 	claims: Claim[],
@@ -37,19 +38,22 @@ const ClaimsTable = ({ claims: initialClaims, caseFile: initialCaseFile, case_id
 		title: 'Summary',
 		dataIndex: 'claim_summary',
 		key: 'claim_summary',
+		render: (text: string) => <HashLink hash={text} />
 	},{
 		title: 'Decision Link',
 		dataIndex: 'decision_link',
 		key: 'decision_link',
+		render: (text: string) => <HashLink hash={text} />
 	},{
 		title: 'Response Link',
 		dataIndex: 'response_link',
 		key: 'response_link',
+		render: (text: string) => <HashLink hash={text} />
 	},{
 		title: 'Status',
 		dataIndex: 'status',
 		key: 'status',
-		render: (text: string) => <span>{CLAIM_STATUS_LIST[text]}</span>
+		render: (text: string) => <span>{CASE_STATUS_LIST[text]}</span>
 	},{
 		title: 'Decision Class',
 		dataIndex: 'decision_class',

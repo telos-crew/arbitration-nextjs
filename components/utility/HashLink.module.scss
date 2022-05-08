@@ -1,0 +1,17 @@
+.hashWrap {
+	max-width: 120px;
+}
+
+.ellipsizeHash {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.copyIcon {
+	vertical-align: middle;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
